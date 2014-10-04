@@ -1,14 +1,7 @@
 #include "main.h"
-#include "ast.h"
 
 int main(int argc, char *argv[]) {
 
-  Node node = {1};
-
-  printf("%d\n", node.value);
-
-  node.Hello();
-  
   if (argc == 2) {
   
     FILE *openFile = fopen(argv[1], "r");

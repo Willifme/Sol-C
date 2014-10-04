@@ -1,4 +1,4 @@
-SRC=main.c lex.yy.c parser.tab.c ast.c
+SRC=main.c ast.c lex.yy.c parser.tab.c
 CFLAGS=-o lexer
 LIBS= -ledit
 
@@ -13,5 +13,6 @@ lex.yy.c:
 
 parser.tab.c:
 	bison -d parser.y
+
 clean:
 	rm -rf lexer lex.yy.c parser.tab.c parser.tab.h

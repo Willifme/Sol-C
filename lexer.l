@@ -6,12 +6,7 @@
 
 #define YY_DECL extern int yylex()
 
-#define TOKEN(t) (yylval.token = t)
-
-/*
-["func"|"if"|"true"|"false"|"null"|"return"]+ { printf("Keyword\n"); }
-
-*/
+#define TOKEN(t) (yylval = t)
 
 %}
 
@@ -23,7 +18,7 @@ NUMBER [0-9]
 
 %%
 
-{NUMBER}+ { yylval.ival = atoi(yytext); return T_INT; }
+{NUMBER}+ { yylval = atoi(yytext); return T_INT; }
 
 "quit" { return TOKEN(T_QUIT); }
 
@@ -40,7 +35,7 @@ NUMBER [0-9]
 "return" { return TOKEN(T_RETURN); }
 
  /* Always put this rule after anykeywords / anything that matches this regex */
-[a-zA-Z]+ { yylval.id = &yytext[0]; return T_IDENTIFIER; }
+[a-zA-Z]+ { yylval = atoi(&yytext[0]); return T_IDENTIFIER; }
 
 "+" { return TOKEN(T_PLUS); }
 

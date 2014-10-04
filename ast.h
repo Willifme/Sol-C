@@ -1,9 +1,17 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-typedef struct {
+typedef struct Node {
 
-int value;
+  struct Node *left;
 
-void (*Hello)();
+  struct Node *right;
+
+  char *token;
 
 } Node;
+
+Node *makeNode(Node *left, Node *right, char *token);
+
+void printTree(Node *tree);
