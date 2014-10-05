@@ -45,13 +45,13 @@ main:
     ;
 
 expression:
-          operator { printTree($1); }
+          operator { printTree($1); printf("\n");}
           | T_QUIT { exit(EXIT_SUCCESS); }
 	    // Get this to have expressions between the brackets
 	    // | T_LBRACKET operator T_RBRACKET { $$ = $2; }
 	  ;
 
-operator: T_INT { $$ = makeNode(0, 0, (char *)yylval); }
+operator: T_INT { $$ = makeNode(0, 0, "hello"); }
           | operator T_PLUS operator { $$ =  makeNode($1, $3, "+"); }
           | operator T_MINUS operator { $$ = makeNode($1, $3, "-"); }
           | operator T_TIMES operator { $$ =  makeNode($1, $3, "*"); }

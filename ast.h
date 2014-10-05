@@ -2,16 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Node {
+typedef enum { typeInt } nodeEnum;
 
-  struct Node *left;
+typedef struct  {
 
-  struct Node *right;
+  int value;
+  
+} Int;
 
-  char *token;
-
-} Node;
-
-Node *makeNode(Node *left, Node *right, char *token);
-
-void printTree(Node *tree);
+Int makeInt(int value);

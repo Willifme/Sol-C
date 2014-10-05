@@ -1,0 +1,10 @@
+Make the AST this way:
+
+Create the header file and implementation file (ast.h, ast.c)
+
+Create a central "Node" struct which has an enum for the different node types,
+function for node specific data and allowance for children.
+
+Then define "Node constructors" e.g. Int, String etc.
+
+Assign everything to "$$" in the bison file.
