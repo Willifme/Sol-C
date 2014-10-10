@@ -786,78 +786,78 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 21 "lexer.l"
-{ yylval = atoi(yytext); return T_INT; }
+{ yylval.ival = atoi(yytext); return T_INT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 23 "lexer.l"
-{ return TOKEN(T_QUIT); }
+{ return T_QUIT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 25 "lexer.l"
-{ return TOKEN(T_FUNC); }
+{ return T_FUNC; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 27 "lexer.l"
-{ return TOKEN(T_IF); }
+{ return T_IF; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 29 "lexer.l"
-{ return TOKEN(T_TRUE); }
+{ return T_TRUE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 31 "lexer.l"
-{ return TOKEN(T_FALSE); }
+{ return T_FALSE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 33 "lexer.l"
-{ return TOKEN(T_NULL); }
+{ return T_NULL; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 35 "lexer.l"
-{ return TOKEN(T_RETURN); }
+{ return T_RETURN; }
 	YY_BREAK
 /* Always put this rule after anykeywords / anything that matches this regex */
 case 9:
 YY_RULE_SETUP
 #line 38 "lexer.l"
-{ yylval = atoi(&yytext[0]); return T_IDENTIFIER; }
+{ yylval.ival = atoi(&yytext[0]); return T_IDENTIFIER; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 40 "lexer.l"
-{ return TOKEN(T_PLUS); }
+{ return T_PLUS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 42 "lexer.l"
-{ return TOKEN(T_MINUS); } // 10 seconds
+{ return T_MINUS; } // 10 seconds
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 44 "lexer.l"
-{ return TOKEN(T_TIMES); }
+{ return T_TIMES; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 46 "lexer.l"
-{ return TOKEN(T_DIVIDE); }
+{ return T_DIVIDE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 48 "lexer.l"
-{ return TOKEN(T_LBRACKET); }
+{ return T_LBRACKET; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 50 "lexer.l"
-{ return TOKEN(T_RBRACKET); }
+{ return T_RBRACKET; }
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */

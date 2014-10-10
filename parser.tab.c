@@ -117,7 +117,7 @@
   
   void yyerror(const char *s);
 
-  #define YYSTYPE struct Node *
+  //#define YYSTYPE Node * 
 
 
 
@@ -140,7 +140,20 @@
 #endif
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+#line 15 "parser.y"
+{
+
+  int ival;
+
+  char *id;
+
+  struct Node *node;
+
+}
+/* Line 193 of yacc.c.  */
+#line 156 "parser.tab.c"
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -152,7 +165,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 156 "parser.tab.c"
+#line 169 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -439,8 +452,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    44,    48,    49,    54,    55,    56,    57,
-      58,    59
+       0,    41,    41,    42,    46,    47,    52,    53,    54,    55,
+      56,    57
 };
 #endif
 
@@ -1350,49 +1363,59 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 4:
-#line 48 "parser.y"
-    { printTree((yyvsp[(1) - (1)])); printf("\n");;}
+        case 2:
+#line 41 "parser.y"
+    {  ;}
+    break;
+
+  case 3:
+#line 42 "parser.y"
+    { deleteNode((yyvsp[(2) - (2)].node)); ;}
+    break;
+
+  case 4:
+#line 46 "parser.y"
+    { printNode((yyvsp[(1) - (1)].node));  ;}
     break;
 
   case 5:
-#line 49 "parser.y"
+#line 47 "parser.y"
     { exit(EXIT_SUCCESS); ;}
     break;
 
   case 6:
-#line 54 "parser.y"
-    { (yyval) = makeNode(0, 0, "hello"); ;}
+#line 52 "parser.y"
+    { (yyval.node) = makeInt(1); ;}
     break;
 
   case 7:
-#line 55 "parser.y"
-    { (yyval) =  makeNode((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)]), "+"); ;}
+#line 53 "parser.y"
+    { (yyval.node) =  makeBinaryOperator((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), PLUS); ;}
     break;
 
   case 8:
-#line 56 "parser.y"
-    { (yyval) = makeNode((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)]), "-"); ;}
+#line 54 "parser.y"
+    { (yyval.node) = makeBinaryOperator((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), MINUS); ;}
     break;
 
   case 9:
-#line 57 "parser.y"
-    { (yyval) =  makeNode((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)]), "*"); ;}
+#line 55 "parser.y"
+    { (yyval.node) =  makeBinaryOperator((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), TIMES); ;}
     break;
 
   case 10:
-#line 58 "parser.y"
-    { (yyval) =  makeNode((yyvsp[(1) - (3)]), (yyvsp[(1) - (3)]), "/"); ;}
+#line 56 "parser.y"
+    { (yyval.node) =  makeBinaryOperator((yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), DIVIDE); ;}
     break;
 
   case 11:
-#line 59 "parser.y"
-    { (yyval) = (yyvsp[(2) - (3)]); ;}
+#line 57 "parser.y"
+    { (yyval.node) = (yyvsp[(2) - (3)].node); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1396 "parser.tab.c"
+#line 1419 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1606,7 +1629,7 @@ yyreturn:
 }
 
 
-#line 62 "parser.y"
+#line 60 "parser.y"
 
 
 void yyerror(const char *s) {

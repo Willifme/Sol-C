@@ -8,21 +8,19 @@
   
   void yyerror(const char *s);
 
-  #define YYSTYPE struct Node *
+  //#define YYSTYPE Node * 
 
 %}
 
-//%union {
+%union {
 
-//  int ival;
+  int ival;
 
-//  char *id;
+  char *id;
 
-//  int token;
+  struct Node *node;
 
-//  Node node;
-
-//}
+}
 
 //%token <ival> T_INT
 
@@ -33,29 +31,29 @@
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
- //%type <node> operator
+%type <node> operator expression
 
 %start main
 
 %%
 
-main:
-    expression
-    | main expression
+main: 
+    expression {  }
+| main expression { deleteNode($2); }
     ;
 
 expression:
-          operator { printTree($1); printf("\n");}
+operator { printNode($1);  }
           | T_QUIT { exit(EXIT_SUCCESS); }
 	    // Get this to have expressions between the brackets
 	    // | T_LBRACKET operator T_RBRACKET { $$ = $2; }
 	  ;
 
-operator: T_INT { $$ = makeNode(0, 0, "hello"); }
-          | operator T_PLUS operator { $$ =  makeNode($1, $3, "+"); }
-          | operator T_MINUS operator { $$ = makeNode($1, $3, "-"); }
-          | operator T_TIMES operator { $$ =  makeNode($1, $3, "*"); }
-          | operator T_DIVIDE operator { $$ =  makeNode($1, $1, "/"); }
+operator: T_INT { $$ = makeInt(1); }
+          | operator T_PLUS operator { $$ =  makeBinaryOperator($1, $3, PLUS); }
+          | operator T_MINUS operator { $$ = makeBinaryOperator($1, $3, MINUS); }
+          | operator T_TIMES operator { $$ =  makeBinaryOperator($1, $3, TIMES); }
+          | operator T_DIVIDE operator { $$ =  makeBinaryOperator($1, $3, DIVIDE); }
           | T_LBRACKET operator T_RBRACKET { $$ = $2; }
           ;
 
