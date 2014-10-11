@@ -9,7 +9,7 @@ sol: ${SRC}
 	clang ${SRC} ${LIBS} ${CFLAGS}
 
 lex.yy.c:
-	flex lexer.l
+	flex -8 lexer.l
 
 parser.tab.c:
 	bison -d parser.y

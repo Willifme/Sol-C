@@ -40,13 +40,23 @@ typedef struct BinaryOperator {
 
   BinaryOperationTypes operator;
 
-  struct Node *left;
+  struct Expression *left;
 
-  struct Node *right;
+  struct Expression *right;
   
 } BinaryOperator;
 
 typedef struct Node {
+
+  union {
+
+    struct Expression *expression;
+    
+  };
+  
+} Node;
+
+typedef struct Expression {
 
   struct Node *left;
 	
@@ -64,28 +74,19 @@ typedef struct Node {
     
   };
   
-  //  int intValue;
-	
-  //const char *stringValue;
-
-  //BinaryOperationTypes operatorValue;
   
-} Node;
+} Expression;
 
-Node *makeNode(Node *left, Node *right);
+Node *makeNode(void);
 
-Node *makeInt(int value);
+Expression *makeInt(int value);
 
-Node *makeString(const char *value);
+Expression *makeString(const char *value);
 
-Node *makeBinaryOperator(Node *left, Node *right, BinaryOperationTypes  operatorValue);
+Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationTypes  operatorValue);
 
 void deleteNode(Node *node);
 
-void printNode(Node *node);
+void printExpression(Expression *expression);
 
-
-
-
-
-
+void deleteExpression(Expression *expression);

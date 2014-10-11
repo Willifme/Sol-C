@@ -1,23 +1,21 @@
 #include "ast.h"
 
-Node *makeNode(Node *left, Node *right) {
+Node *makeNode(void) {
 
   Node *newNode = (Node *)malloc(sizeof(Node));
-	
-  newNode->left = left;
-	
-  newNode->right = right;
 	
   return newNode;
 
 }
 
-Node *makeInt(int value) {
+Expression *makeInt(int value) {
 
-  printf("making int\n");
-  
-  Node *newInt = (Node *)malloc(sizeof(Node));
+  Expression *newInt = (Expression *)malloc(sizeof(Expression));
+  /*
+    newInt->left = makeNode();
 
+    newInt->right = NULL;
+  */
   newInt->number.value = value;
 	
   newInt->type = INT;
@@ -26,9 +24,9 @@ Node *makeInt(int value) {
 
 }
 
-Node *makeString(const char *value) {
+Expression *makeString(const char *value) {
 
-  Node *newString = (Node *)malloc(sizeof(Node));
+  Expression *newString = (Expression *)malloc(sizeof(Expression));
 	
   newString->string.value = value;
 	
@@ -38,9 +36,9 @@ Node *makeString(const char *value) {
 
 }
 
-Node *makeBinaryOperator(Node *left, Node *right, BinaryOperationTypes operatorValue) {
+Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationTypes operatorValue) {
 
-  Node *newBinaryOperator = (Node *)malloc(sizeof(Node));
+  Expression *newBinaryOperator = (Expression *)malloc(sizeof(Expression));
 
   newBinaryOperator->binaryOperator.left = left;
 
@@ -56,65 +54,46 @@ Node *makeBinaryOperator(Node *left, Node *right, BinaryOperationTypes operatorV
 
 void deleteNode(Node *node) {
 
-  if (node->left) {
-		
-    deleteNode(node->left);
-		
-  } 
-	
-  if (node->right) {
-	
-    deleteNode(node->right);
-	
-  }
-	
   free(node);
 
 }
 
-void printNode(Node *node) {
+void printExpression(Expression *expression) {
 
-  if (node->left) {
-	
-    printNode(node->left);
-		
-  }
-	
-  if (node->right) {
-	
-    printNode(node->right);
-		
-  }
-        
-  switch (node->type) {
+  const char *operator;
+    
+  if (expression->binaryOperator.left != NULL)
+    printExpression(expression->binaryOperator.left);
+    
+  if (expression->binaryOperator.right != NULL)
+    printExpression(expression->binaryOperator.right);
+
+
+  switch (expression->type) {
 	
   case INT:
 		
-    if (node->number.value ) {
+    // if (expression->number.value ) {
 		
-      printf("Int: %d\n", node->number.value);
+    printf("Int: %d\n", expression->number.value);
 
-    }
+    //    }
 
     break;
 			
   case STRING:
 		
-    if (node->string.value) {
+    // if (expression->string.value) {
 		
-      printf("String: %s\n", node->string.value);
+    printf("String: %s\n", expression->string.value);
 			
-    }
+    //   }
 			
     break;
 
   case OPERATOR:
 
-    if (node->binaryOperator.operator) {
-
-      printf("Operator: %u\n", node->binaryOperator.operator);
-
-    }
+    // printf("Operator: %s\n", operator);
 
     break;
 			
@@ -125,18 +104,48 @@ void printNode(Node *node) {
     break;
 	
   }
-	
+  
+}
+
+void deleteExpression(Expression *expression) {
+
+  if (expression->left != NULL) {
+
+    deleteNode(expression->left);
+
+  }
+
+  if (expression->right != NULL) {
+
+    deleteNode(expression->right);
+
+  }
+
+  if (expression->binaryOperator.left != NULL) {
+
+    deleteExpression(expression->binaryOperator.left);
+    
+  }
+
+  if (expression->binaryOperator.right != NULL) {
+
+    deleteExpression(expression->binaryOperator.right);
+    
+  }
+  
+  free(expression);
+  
 }
 
 int main() {
 
-  // Node *main = makeBinaryOperator(makeInt(1), makeInt(1), PLUS);
+  Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
 
-  Node *main = makeInt(1);
+  //  Expression *main = makeInt(1);
   
-  printNode(main);
+  printExpression(main);
 	
-  deleteNode(main);
+  deleteExpression(main);
 
   return 0;
   

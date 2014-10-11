@@ -35,7 +35,7 @@ NUMBER [0-9]
 "return" { return T_RETURN; }
 
  /* Always put this rule after anykeywords / anything that matches this regex */
-[a-zA-Z]+ { yylval.ival = atoi(&yytext[0]); return T_IDENTIFIER; }
+[a-zA-Z\x80-\xf3]+ { yylval.ival = atoi(&yytext[0]); return T_IDENTIFIER; }
 
 "+" { return T_PLUS; }
 
