@@ -18,20 +18,20 @@
 
   char *id;
 
-  struct Node *node;
+  struct Expression *expression;
 
 }
 
-//%token <ival> T_INT
+%token <ival> T_INT
 
 %token T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
 %token T_QUIT T_IDENTIFIER T_FUNC T_IF T_TRUE T_FALSE T_NULL
-%token T_RETURN T_COMMA T_INT
+%token T_RETURN T_COMMA
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
-%type <node> operator expression
+%type <expression> operator expression
 
 %start main
 
@@ -39,22 +39,22 @@
 
 main: 
     expression {  }
-| main expression { deleteNode($2); }
+    | main expression {  }
     ;
 
 expression:
-operator { printNode($1);  }
+          operator { printExpression($1); deleteExpression($1); }
           | T_QUIT { exit(EXIT_SUCCESS); }
 	    // Get this to have expressions between the brackets
-	    // | T_LBRACKET operator T_RBRACKET { $$ = $2; }
+	  | T_LBRACKET expression T_RBRACKET { $$ = $2; }
 	  ;
 
-operator: T_INT { $$ = makeInt(1); }
-          | operator T_PLUS operator { $$ =  makeBinaryOperator($1, $3, PLUS); }
-          | operator T_MINUS operator { $$ = makeBinaryOperator($1, $3, MINUS); }
-          | operator T_TIMES operator { $$ =  makeBinaryOperator($1, $3, TIMES); }
-          | operator T_DIVIDE operator { $$ =  makeBinaryOperator($1, $3, DIVIDE); }
-          | T_LBRACKET operator T_RBRACKET { $$ = $2; }
+operator: T_INT { $$ = makeInt($1); }
+          | operator T_PLUS operator {  $$ =  makeBinaryOperation($1, $3, PLUS); }
+          | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
+          | operator T_TIMES operator { $$ =  makeBinaryOperation($1, $3, TIMES); }
+          | operator T_DIVIDE operator { $$ =  makeBinaryOperation($1, $3, DIVIDE); }
+//   | T_LBRACKET operator T_RBRACKET { $$ = $2; }
           ;
 
 %%

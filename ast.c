@@ -11,11 +11,7 @@ Node *makeNode(void) {
 Expression *makeInt(int value) {
 
   Expression *newInt = (Expression *)malloc(sizeof(Expression));
-  /*
-    newInt->left = makeNode();
 
-    newInt->right = NULL;
-  */
   newInt->number.value = value;
 	
   newInt->type = INT;
@@ -68,32 +64,23 @@ void printExpression(Expression *expression) {
   if (expression->binaryOperator.right != NULL)
     printExpression(expression->binaryOperator.right);
 
-
   switch (expression->type) {
 	
   case INT:
 		
-    // if (expression->number.value ) {
-		
     printf("Int: %d\n", expression->number.value);
-
-    //    }
 
     break;
 			
   case STRING:
 		
-    // if (expression->string.value) {
-		
     printf("String: %s\n", expression->string.value);
-			
-    //   }
 			
     break;
 
   case OPERATOR:
 
-    // printf("Operator: %s\n", operator);
+    printf("Operator: %s\n", getBinaryOperationString(expression->binaryOperator.operator));
 
     break;
 			
@@ -137,11 +124,51 @@ void deleteExpression(Expression *expression) {
   
 }
 
+const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {
+
+  switch (operatorValue) {
+
+  case PLUS:
+
+    return "+";
+
+    break;
+
+  case MINUS:
+
+    return "-";
+
+    break;
+
+  case TIMES:
+
+    return "*";
+
+    break;
+
+  case DIVIDE:
+
+    return "/";
+
+    break;
+
+  default:
+
+    return "Binary operator type not found";
+
+    break; 
+
+  }
+
+  // Are the breaks neccesary
+
+}
+/*
 int main() {
 
-  Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
+  //Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
 
-  //  Expression *main = makeInt(1);
+  Expression *main = makeInt(1);
   
   printExpression(main);
 	
@@ -150,5 +177,4 @@ int main() {
   return 0;
   
 }
-
-
+*/

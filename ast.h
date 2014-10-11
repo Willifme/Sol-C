@@ -90,3 +90,5 @@ void deleteNode(Node *node);
 void printExpression(Expression *expression);
 
 void deleteExpression(Expression *expression);
+
+const char *getBinaryOperationString(BinaryOperationTypes operatorValue);
