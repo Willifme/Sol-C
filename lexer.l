@@ -6,7 +6,7 @@
 
 #define YY_DECL extern int yylex()
 
-#define TOKEN(t) (yylval = t)
+#define TOKEN(t) (yylval.token = t)
 
 %}
 
@@ -20,34 +20,34 @@ NUMBER [0-9]
 
 {NUMBER}+ { yylval.ival = atoi(yytext); return T_INT; }
 
-"quit" { return T_QUIT; }
+"quit" { return TOKEN(T_QUIT); }
 
-"func" { return T_FUNC; }
+"func" { return TOKEN(T_FUNC); }
 
-"if" { return T_IF; }
+"if" { return TOKEN(T_IF); }
 
-"true" { return T_TRUE; }
+"true" { return TOKEN(T_TRUE); }
 
-"false" { return T_FALSE; }
+"false" { return TOKEN(T_FALSE); }
 
-"null" { return T_NULL; }
+"null" { return TOKEN(T_NULL); }
 
-"return" { return T_RETURN; }
+"return" { return TOKEN(T_RETURN); }
 
  /* Always put this rule after anykeywords / anything that matches this regex */
-[a-zA-Z\x80-\xf3]+ { yylval.ival = atoi(&yytext[0]); return T_IDENTIFIER; }
+[a-zA-Z\x80-\xf3]+ { yylval.id = strndup(yytext, yyleng); return T_IDENTIFIER; }
 
-"+" { return T_PLUS; }
+"+" { return TOKEN(T_PLUS); }
 
-"-" { return T_MINUS; } // 10 seconds
+"-" { return TOKEN(T_MINUS); } // 10 seconds
 
-"*" { return T_TIMES; }
+"*" { return TOKEN(T_TIMES); }
 
-"/" { return T_DIVIDE; }
+"/" { return TOKEN(T_DIVIDE); }
 
-"(" { return T_LBRACKET; }
+"(" { return TOKEN(T_LBRACKET); }
 
-")" { return T_RBRACKET; }
+")" { return TOKEN(T_RBRACKET); }
 
 [ \t\n]  
 

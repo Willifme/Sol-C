@@ -79,6 +79,8 @@ typedef struct Expression {
 
 Node *makeNode(void);
 
+Expression *makeExpression(void);
+
 Expression *makeInt(int value);
 
 Expression *makeString(const char *value);

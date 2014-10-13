@@ -8,6 +8,14 @@ Node *makeNode(void) {
 
 }
 
+Expression *makeExpression(void) {
+
+  Expression *newExpression = (Expression *)malloc(sizeof(Expression));
+
+  return newExpression;
+
+}
+
 Expression *makeInt(int value) {
 
   Expression *newInt = (Expression *)malloc(sizeof(Expression));
@@ -91,7 +99,7 @@ void printExpression(Expression *expression) {
     break;
 	
   }
-  
+
 }
 
 void deleteExpression(Expression *expression) {
