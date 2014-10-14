@@ -103,7 +103,8 @@ void printExpression(Expression *expression) {
 }
 
 void deleteExpression(Expression *expression) {
-
+// Redo this
+/*
   if (expression->left != NULL) {
 
     deleteNode(expression->left);
@@ -129,7 +130,7 @@ void deleteExpression(Expression *expression) {
   }
   
   free(expression);
-  
+  */
 }
 
 const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {

@@ -40,7 +40,7 @@
 %%
 
 main: 
-    expression { printExpression($1); deleteExpression($1); }
+    expression { printExpression($1); }
     | main expression { printExpression($2); deleteExpression($2); }
     ;
 
@@ -55,7 +55,7 @@ expression:
 number: T_INT { $$ = makeInt($1); }
 
 operator: 
-          | operator T_PLUS operator {  $$ =  makeBinaryOperation($1, $3, PLUS); }
+		  operator T_PLUS operator { $$ =  makeBinaryOperation($1, $3, PLUS); }
           | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
           | operator T_TIMES operator { $$ =  makeBinaryOperation($1, $3, TIMES); }
           | operator T_DIVIDE operator { $$ =  makeBinaryOperation($1, $3, DIVIDE); }
