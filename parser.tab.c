@@ -1522,7 +1522,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 60 "parser.y" /* yacc.c:1906  */
+#line 59 "parser.y" /* yacc.c:1906  */
 
 
 void yyerror(const char *s) {

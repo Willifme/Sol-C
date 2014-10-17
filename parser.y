@@ -40,13 +40,13 @@
 %%
 
 main: expression { printExpression($1); deleteExpression($1); }
-| main expression { printExpression($2); deleteExpression($2);  }
+    | main expression { printExpression($2); deleteExpression($2);  }
     ;
 
 expression: operator
           | T_QUIT { exit(EXIT_SUCCESS); }
 	    // Get this to have expressions between the brackets
-	  | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+          | T_LBRACKET expression T_RBRACKET { $$ = $2; }
 	  ;
 
 operator: T_INT { $$ = makeInt($1); }
@@ -54,7 +54,6 @@ operator: T_INT { $$ = makeInt($1); }
           | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
           | operator T_TIMES operator { $$ = makeBinaryOperation($1, $3, TIMES); }
           | operator T_DIVIDE operator { $$ = makeBinaryOperation($1, $3, DIVIDE); }
-//| T_LBRACKET operator T_RBRACKET { $$ = $2; }
           ;
 
 %%
