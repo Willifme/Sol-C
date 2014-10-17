@@ -33,33 +33,28 @@
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
-%type <expression> operator expression number
+%type <expression> operator expression
 
 %start main
 
 %%
 
-main: 
-    expression { printExpression($1); }
-    | main expression { printExpression($2); deleteExpression($2); }
+main: expression { printExpression($1); deleteExpression($1); }
+| main expression { printExpression($2); deleteExpression($2);  }
     ;
 
-expression:
-          operator 
-          | number
+expression: operator
           | T_QUIT { exit(EXIT_SUCCESS); }
 	    // Get this to have expressions between the brackets
 	  | T_LBRACKET expression T_RBRACKET { $$ = $2; }
 	  ;
 
-number: T_INT { $$ = makeInt($1); }
-
-operator: 
-		  operator T_PLUS operator { $$ =  makeBinaryOperation($1, $3, PLUS); }
+operator: T_INT { $$ = makeInt($1); }
+          | operator T_PLUS operator { $$ = makeBinaryOperation($1, $3, PLUS); }
           | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
-          | operator T_TIMES operator { $$ =  makeBinaryOperation($1, $3, TIMES); }
-          | operator T_DIVIDE operator { $$ =  makeBinaryOperation($1, $3, DIVIDE); }
-          | T_LBRACKET operator T_RBRACKET { $$ = $2; }
+          | operator T_TIMES operator { $$ = makeBinaryOperation($1, $3, TIMES); }
+          | operator T_DIVIDE operator { $$ = makeBinaryOperation($1, $3, DIVIDE); }
+//| T_LBRACKET operator T_RBRACKET { $$ = $2; }
           ;
 
 %%

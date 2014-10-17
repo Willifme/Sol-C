@@ -24,6 +24,10 @@ Expression *makeInt(int value) {
 	
   newInt->type = INT;
 
+  newInt->left = makeNode();
+
+  newInt->right = NULL;
+
   return newInt;
 
 }
@@ -36,6 +40,10 @@ Expression *makeString(const char *value) {
 	
   newString->type = STRING;
 	
+  newString->left = makeNode();
+
+  newString->right = NULL;
+
   return newString;
 
 }
@@ -52,6 +60,10 @@ Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOpera
 
   newBinaryOperator->type = OPERATOR;
 
+  newBinaryOperator->left = makeNode();
+
+  newBinaryOperator->right = NULL;
+
   return newBinaryOperator;
   
 }
@@ -65,13 +77,7 @@ void deleteNode(Node *node) {
 void printExpression(Expression *expression) {
 
   const char *operator;
-    
-  if (expression->binaryOperator.left != NULL)
-    printExpression(expression->binaryOperator.left);
-    
-  if (expression->binaryOperator.right != NULL)
-    printExpression(expression->binaryOperator.right);
-
+  
   switch (expression->type) {
 	
   case INT:
@@ -88,6 +94,12 @@ void printExpression(Expression *expression) {
 
   case OPERATOR:
 
+    if (expression->binaryOperator.left != NULL)
+      printExpression(expression->binaryOperator.left);
+    
+    if (expression->binaryOperator.right != NULL)
+      printExpression(expression->binaryOperator.right);
+
     printf("Operator: %s\n", getBinaryOperationString(expression->binaryOperator.operator));
 
     break;
@@ -99,12 +111,13 @@ void printExpression(Expression *expression) {
     break;
 	
   }
-
+  
 }
 
 void deleteExpression(Expression *expression) {
-// Redo this
-/*
+
+  printf("Called\n");
+
   if (expression->left != NULL) {
 
     deleteNode(expression->left);
@@ -117,20 +130,43 @@ void deleteExpression(Expression *expression) {
 
   }
 
-  if (expression->binaryOperator.left != NULL) {
 
-    deleteExpression(expression->binaryOperator.left);
+  switch (expression->type) {
+	
+  case INT:
+
+    break;
+			
+  case STRING:
+			
+    break;
+
+  case OPERATOR:
     
+    if (expression->binaryOperator.left != NULL) {
+
+      deleteExpression(expression->binaryOperator.left);
+
+    }
+
+    if (expression->binaryOperator.right != NULL) {
+
+      deleteExpression(expression->binaryOperator.right);
+
+    }
+
+    break;
+			
+  default:
+		
+    printf("Cannot delete expression\n");
+			
+    break;
+	
   }
 
-  if (expression->binaryOperator.right != NULL) {
-
-    deleteExpression(expression->binaryOperator.right);
-    
-  }
-  
   free(expression);
-  */
+
 }
 
 const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {
@@ -169,21 +205,48 @@ const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {
 
   }
 
-  // Are the breaks neccesary
+  // Are the breaks neccesary?
 
 }
 /*
 int main() {
 
-  //Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
+  //  Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
 
-  Expression *main = makeInt(1);
+  // Expression *main = makeInt(1);
   
-  printExpression(main);
+  //   printExpression(main);
 	
-  deleteExpression(main);
+  // deleteExpression(main);
+
+  repl();
 
   return 0;
+  
+}
+
+void repl(void) {
+
+  Expression *expression;
+
+  while (1) {
+
+    char *input= readline(">> ");
+
+    add_history(input);
+
+    if (!input) 
+      return;
+
+    expression = makeInt(1);
+
+    printExpression(expression);
+
+    deleteExpression(expression);
+
+    free(input);
+
+  }
   
 }
 */

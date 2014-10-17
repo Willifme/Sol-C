@@ -1,14 +1,7 @@
 #include "main.h"
-#include "ast.h"
 
 int main(int argc, char *argv[]) {
-  /*
-  Node *main = makeBinaryOperator(makeInt(1), makeString("hello"), "+");
 
-  printNode(main);
-
-  deleteNode(main);
-  */
   if (argc == 2) {
   
     FILE *openFile = fopen(argv[1], "r");
