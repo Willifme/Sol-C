@@ -116,20 +116,11 @@ void printExpression(Expression *expression) {
 
 void deleteExpression(Expression *expression) {
 
-  printf("Called\n");
-
-  if (expression->left != NULL) {
-
+  if (expression->left != NULL) 
     deleteNode(expression->left);
 
-  }
-
-  if (expression->right != NULL) {
-
+  if (expression->right != NULL)
     deleteNode(expression->right);
-
-  }
-
 
   switch (expression->type) {
 	
@@ -143,17 +134,11 @@ void deleteExpression(Expression *expression) {
 
   case OPERATOR:
     
-    if (expression->binaryOperator.left != NULL) {
-
+    if (expression->binaryOperator.left != NULL) 
       deleteExpression(expression->binaryOperator.left);
 
-    }
-
-    if (expression->binaryOperator.right != NULL) {
-
+    if (expression->binaryOperator.right != NULL)
       deleteExpression(expression->binaryOperator.right);
-
-    }
 
     break;
 			
@@ -208,45 +193,3 @@ const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {
   // Are the breaks neccesary?
 
 }
-/*
-int main() {
-
-  //  Expression *main = makeBinaryOperation(makeInt(1), makeInt(1), PLUS);
-
-  // Expression *main = makeInt(1);
-  
-  //   printExpression(main);
-	
-  // deleteExpression(main);
-
-  repl();
-
-  return 0;
-  
-}
-
-void repl(void) {
-
-  Expression *expression;
-
-  while (1) {
-
-    char *input= readline(">> ");
-
-    add_history(input);
-
-    if (!input) 
-      return;
-
-    expression = makeInt(1);
-
-    printExpression(expression);
-
-    deleteExpression(expression);
-
-    free(input);
-
-  }
-  
-}
-*/

@@ -45,9 +45,13 @@
 %%
 
 main: expression { printExpression($1); deleteExpression($1); }
+<<<<<<< HEAD
     | statement
     | main expression { printExpression($2); deleteExpression($2); }
     | main statement
+=======
+    | main expression { printExpression($2); deleteExpression($2);  }
+>>>>>>> c115568c4d1be7a08ff355ba0e7cc2d2adcb41cf
     ;
 
 statement: T_QUIT { exit(EXIT_SUCCESS); }
@@ -55,6 +59,7 @@ statement: T_QUIT { exit(EXIT_SUCCESS); }
          ;
 
 expression: operator
+<<<<<<< HEAD
           | string
             // Get this to have expressions between the brackets
 	  | T_LBRACKET expression T_RBRACKET { $$ = $2; }
@@ -62,13 +67,18 @@ expression: operator
 
 string: T_DOUBLEQOUTE T_IDENTIFIER T_DOUBLEQOUTE { $$ = makeString($2); }
       ;
+=======
+          | T_QUIT { exit(EXIT_SUCCESS); }
+	    // Get this to have expressions between the brackets
+          | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+	  ;
+>>>>>>> c115568c4d1be7a08ff355ba0e7cc2d2adcb41cf
 
 operator: T_INT {  $$ = makeInt($1); }
           | operator T_PLUS operator { $$ = makeBinaryOperation($1, $3, PLUS); }
           | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
           | operator T_TIMES operator { $$ = makeBinaryOperation($1, $3, TIMES); }
           | operator T_DIVIDE operator { $$ = makeBinaryOperation($1, $3, DIVIDE); }
-//| T_LBRACKET operator T_RBRACKET { $$ = $2; }
           ;
 
 %%

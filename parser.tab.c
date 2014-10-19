@@ -1641,9 +1641,13 @@ yyreturn:
   /* Make sure YYID is used.  */
   return YYID (yyresult);
 }
+<<<<<<< HEAD
 
 
 #line 74 "parser.y"
+=======
+#line 59 "parser.y" /* yacc.c:1906  */
+>>>>>>> c115568c4d1be7a08ff355ba0e7cc2d2adcb41cf
 
 
 void yyerror(const char *s) {
