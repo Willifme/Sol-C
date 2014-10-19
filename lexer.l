@@ -34,7 +34,7 @@ NUMBER [0-9]
 
 "return" { return TOKEN(T_RETURN); }
 
- /* Always put this rule after anykeywords / anything that matches this regex */
+ /* Always put this rule after any keywords or anything that matches this regex */
 [a-zA-Z\x80-\xf3]+ { yylval.id = strndup(yytext, yyleng); return T_IDENTIFIER; }
 
 "+" { return TOKEN(T_PLUS); }
@@ -49,7 +49,11 @@ NUMBER [0-9]
 
 ")" { return TOKEN(T_RBRACKET); }
 
-[ \t\n]  
+"//"[^\r\n]* { return TOKEN(T_COMMENT); }
+
+"\"" { return TOKEN(T_DOUBLEQOUTE); }
+
+[ \t\n]
 
 . { printf("Unrecognised character \"%s\" at line %d\n", yytext, yylineno); yyterminate(); }
 

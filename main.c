@@ -2,13 +2,17 @@
 
 int main(int argc, char *argv[]) {
 
+  // Check if a filename is given.
+  
   if (argc == 2) {
   
     FILE *openFile = fopen(argv[1], "r");
 
+    // Checks if the file can be open if not exit with a error.n
+    
     if (!openFile) {
 
-      printf("Cannot open %sl\n", argv[1]);
+      fprintf(stderr, "Cannot open %sl\n", argv[1]);
 
       return EXIT_FAILURE;
 
@@ -17,7 +21,7 @@ int main(int argc, char *argv[]) {
     // Set lex to read from it 
     yyin = openFile;
 
-    // Parse through input until there is no more
+    // Parse through input until the end of the file has been reached
     do {
 
       yyparse();
@@ -42,12 +46,23 @@ void repl(void) {
 
     char *input= readline(">> ");
 
-    add_history(input);
+    /* Check if the length of the input is >= 1 e.g. There is some input then continue
+    else go back to the start of the loop and ask for input again */
+    
+    if (strlen(input) >= 1) {
 
-    yy_scan_string(input);
+      add_history(input);
 
-    yyparse();
+      yy_scan_string(input);
+
+      yyparse();
+
+    } else {
+
+      continue;
       
+    }
+    
     free(input);
 
   }
