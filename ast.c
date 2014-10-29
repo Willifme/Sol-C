@@ -43,6 +43,8 @@ Expression *makeEmptyExpression(void) {
 
   newExpression->integer = NULL;
 
+  newExpression->string = NULL;
+
   newExpression->binaryOperation = NULL;
 
   return newExpression;

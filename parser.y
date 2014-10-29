@@ -22,6 +22,8 @@
 
   char *string;
 
+  struct Node *node;
+
   struct Expression *expression;
 
 }
@@ -36,15 +38,17 @@
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
-%type <expression> expression operator string
+%type <node> expression
+
+%type <expression> operator string
 
 %start main
 
 %%
 
-main: expression { makeNode($1); printExpression($1); deleteExpression($1); }
+main: expression { deleteNode($1); }
     | statement
-    | main expression { printExpression($2); deleteExpression($2); }
+    | main expression { deleteNode($2); }
     | main statement
     ;
 
@@ -52,8 +56,8 @@ statement: T_QUIT { exit(EXIT_SUCCESS); }
          | T_COMMENT
          ;
 
-expression: operator
-          | string
+expression: operator { $$ = makeNode($1); }
+          | string { $$ = makeNode($1); }
             // Get this to have expressions between the brackets
 	        | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
