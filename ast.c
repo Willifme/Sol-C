@@ -1,195 +1,220 @@
 #include "ast.h"
+/*
+int main(int argc, char *argv[]) {
 
-Node *makeNode(void) {
+  //Node *node = makeNode(makeBinaryOperation(makeIntegerExpression(1), makeIntegerExpression(1), PLUS));
 
-  Node *newNode = (Node *)malloc(sizeof(Node));
-	
-  return newNode;
+//  Node *node = makeNode(makeBinaryOperation(makeBinaryOperation(makeIntegerExpression(1), makeIntegerExpression(2), PLUS), emakeBinaryOperation(makeIntegerExpression(3), makeIntegerExpression(4), TIMES), MINUS));
+
+  Node *node = makeNode(makeStringExpression("Hello"));
+
+  printNode(node);
+
+  deleteNode(node);
+
+  return 0;
+
+}*/
+
+Node *makeEmptyNode(void) {
+
+  Node *node = malloc(sizeof(Node));
+
+  node->expression = makeEmptyExpression();
+
+  return node;
 
 }
 
-Expression *makeExpression(void) {
+Node *makeNode(Expression *expression) {
 
-  Expression *newExpression = (Expression *)malloc(sizeof(Expression));
+  Node *node = malloc(sizeof(Node));
+
+  if (expression)
+    node->expression = expression;
+
+  return node;
+
+}
+
+Expression *makeEmptyExpression(void) {
+
+  Expression *newExpression = malloc(sizeof(Expression));
+
+  newExpression->integer = NULL;
+
+  newExpression->binaryOperation = NULL;
 
   return newExpression;
 
 }
 
-Expression *makeInt(int value) {
+Expression *makeIntegerExpression(int value) {
 
-  Expression *newInt = (Expression *)malloc(sizeof(Expression));
+  Expression *newInteger = makeEmptyExpression();
 
-  newInt->number.value = value;
-	
-  newInt->type = INT;
+  newInteger->integer = malloc(sizeof(Integer));
 
-  newInt->left = makeNode();
+  newInteger->integer->value = value;
 
-  newInt->right = NULL;
-
-  return newInt;
+  return newInteger;
 
 }
 
-Expression *makeString(const char *value) {
+Expression *makeStringExpression(char *value) {
 
-  Expression *newString = (Expression *)malloc(sizeof(Expression));
-	
-  newString->string.value = value;
-	
-  newString->type = STRING;
-	
-  newString->left = makeNode();
+  Expression *newString = makeEmptyExpression();
 
-  newString->right = NULL;
+  newString->string = malloc(sizeof(String));
+
+  newString->string->value = value;
 
   return newString;
 
 }
 
-Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationTypes operatorValue) {
+Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationType type) {
 
-  Expression *newBinaryOperator = (Expression *)malloc(sizeof(Expression));
+  Expression *newBinaryOperation = makeEmptyExpression();
 
-  newBinaryOperator->binaryOperator.left = left;
+  newBinaryOperation->binaryOperation = malloc(sizeof(BinaryOperation));
 
-  newBinaryOperator->binaryOperator.right = right;
-  
-  newBinaryOperator->binaryOperator.operator = operatorValue;
+  newBinaryOperation->binaryOperation->left = left;
 
-  newBinaryOperator->type = OPERATOR;
+  newBinaryOperation->binaryOperation->right = right;
 
-  newBinaryOperator->left = makeNode();
+  newBinaryOperation->binaryOperation->type = type;
 
-  newBinaryOperator->right = NULL;
+  return newBinaryOperation;
 
-  return newBinaryOperator;
-  
 }
 
 void deleteNode(Node *node) {
+
+  if (node->expression)
+    deleteExpression(node->expression);
 
   free(node);
 
 }
 
-void printExpression(Expression *expression) {
-
-  const char *operator;
-  
-  switch (expression->type) {
-	
-  case INT:
-		
-    printf("Int: %d\n", expression->number.value);
-
-    break;
-			
-  case STRING:
-		
-    printf("String: %s\n", expression->string.value);
-			
-    break;
-
-  case OPERATOR:
-
-    if (expression->binaryOperator.left != NULL)
-      printExpression(expression->binaryOperator.left);
-    
-    if (expression->binaryOperator.right != NULL)
-      printExpression(expression->binaryOperator.right);
-
-    printf("Operator: %s\n", getBinaryOperationString(expression->binaryOperator.operator));
-
-    break;
-			
-  default:
-		
-    printf("Type not found\n");
-			
-    break;
-	
-  }
-  
-}
-
 void deleteExpression(Expression *expression) {
 
-  if (expression->left != NULL) 
-    deleteNode(expression->left);
+  if (expression->integer)
+    free(expression->integer);
 
-  if (expression->right != NULL)
-    deleteNode(expression->right);
+  if (expression->string)
+    free(expression->string);
 
-  switch (expression->type) {
-	
-  case INT:
+  if (expression->binaryOperation) {
 
-    break;
-			
-  case STRING:
-			
-    break;
+    if (expression->binaryOperation->left)
+      deleteExpression(expression->binaryOperation->left);
 
-  case OPERATOR:
-    
-    if (expression->binaryOperator.left != NULL) 
-      deleteExpression(expression->binaryOperator.left);
+    if (expression->binaryOperation->right)
+      deleteExpression(expression->binaryOperation->right);
 
-    if (expression->binaryOperator.right != NULL)
-      deleteExpression(expression->binaryOperator.right);
+    // If the left and right are freed delete the struct all together
 
-    break;
-			
-  default:
-		
-    printf("Cannot delete expression\n");
-			
-    break;
-	
+    free(expression->binaryOperation);
+
   }
 
   free(expression);
 
 }
 
-const char *getBinaryOperationString(BinaryOperationTypes operatorValue) {
+static int indentLevel = 0;
 
-  switch (operatorValue) {
+void printNode(Node *node) {
 
-  case PLUS:
+  if (node->expression) {
 
-    return "+";
+    printExpression(node->expression);
 
-    break;
+  }
+}
 
-  case MINUS:
+void printExpression(Expression *expression) {
 
-    return "-";
+  // Reverse this
 
-    break;
+  for (int i = 0; i < indentLevel; i++) {
 
-  case TIMES:
-
-    return "*";
-
-    break;
-
-  case DIVIDE:
-
-    return "/";
-
-    break;
-
-  default:
-
-    return "Binary operator type not found";
-
-    break; 
+    printf("\t");
 
   }
 
-  // Are the breaks neccesary?
+  if (expression->integer) {
+
+    // Hardcode for now
+    printf("%d\n", expression->integer->value);
+
+    indentLevel += 1;
+
+  }
+
+  if (expression->string) {
+
+    // Hardcode for now
+    printf("%s\n", expression->string->value);
+
+  }
+
+  /*
+    if(getBinaryOperationTypeChar(expression->binaryOperation->type)) {
+
+    printf("%c\n", getBinaryOperationTypeChar(expression->binaryOperation->type));
+
+
+    }
+  */
+  if (expression->binaryOperation) {
+
+    if (expression->binaryOperation->left)
+      printExpression(expression->binaryOperation->left);
+
+    if (expression->binaryOperation->right)
+      printExpression(expression->binaryOperation->right);
+
+  }
+
+}
+
+char getBinaryOperationTypeChar(BinaryOperationType type) {
+
+  // I don't think the breaks are neccessary
+
+  switch (type) {
+
+    case PLUS:
+
+      return '+';
+
+      break;
+
+    case MINUS:
+
+      return '-';
+
+      break;
+
+    case TIMES:
+
+      return '*';
+
+      break;
+
+    case DIVIDE:
+
+      return '/';
+
+      break;
+
+    default:
+
+      break;
+
+  }
 
 }

@@ -6,7 +6,7 @@
 
 #define YY_DECL extern int yylex()
 
-#define TOKEN(t) (yylval.token = t)
+#define TOKEN(t) (yylval.integer = t)
 
 %}
 
@@ -16,9 +16,13 @@
 
 NUMBER [0-9]
 
+DOUBLEQOUTE \"
+
+SINGLEQOUTE \'
+
 %%
 
-{NUMBER}+ { yylval.ival = atoi(yytext); return T_INT; }
+{NUMBER}+ { yylval.integer = atoi(yytext); return T_INT; }
 
 "quit" { return TOKEN(T_QUIT); }
 
@@ -35,7 +39,11 @@ NUMBER [0-9]
 "return" { return TOKEN(T_RETURN); }
 
  /* Always put this rule after any keywords or anything that matches this regex */
-[a-zA-Z\x80-\xf3]+ { yylval.id = strndup(yytext, yyleng); return T_IDENTIFIER; }
+[a-zA-Z\x80-\xf3]+ { yylval.string = strndup(yytext, yyleng); return T_IDENTIFIER; }
+
+{DOUBLEQOUTE}[^(\"|')]*{DOUBLEQOUTE} { yylval.string = yytext; return T_STRING; }
+
+{SINGLEQOUTE}([^']|\\.)*{SINGLEQOUTE} { yylval.string = yytext; return T_STRING; }
 
 "+" { return TOKEN(T_PLUS); }
 
@@ -49,11 +57,9 @@ NUMBER [0-9]
 
 ")" { return TOKEN(T_RBRACKET); }
 
-"//"[^\r\n]* { return TOKEN(T_COMMENT); }
+"//"[^*\n]+ { return TOKEN(T_COMMENT); } // The regex at the end allows for anything
 
-"\"" { return TOKEN(T_DOUBLEQOUTE); }
-
-[ \t\n]
+[ \t\n]+ { yylineno += 1; }
 
 . { printf("Unrecognised character \"%s\" at line %d\n", yytext, yylineno); yyterminate(); }
 

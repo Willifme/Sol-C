@@ -41,65 +41,63 @@
    enum yytokentype {
      T_INT = 258,
      T_IDENTIFIER = 259,
-     T_PLUS = 260,
-     T_MINUS = 261,
-     T_TIMES = 262,
-     T_DIVIDE = 263,
-     T_LBRACKET = 264,
-     T_RBRACKET = 265,
-     T_QUIT = 266,
-     T_FUNC = 267,
-     T_IF = 268,
-     T_TRUE = 269,
-     T_FALSE = 270,
-     T_NULL = 271,
-     T_RETURN = 272,
-     T_COMMA = 273,
-     T_COMMENT = 274,
-     T_DOUBLEQOUTE = 275
+     T_STRING = 260,
+     T_PLUS = 261,
+     T_MINUS = 262,
+     T_TIMES = 263,
+     T_DIVIDE = 264,
+     T_LBRACKET = 265,
+     T_RBRACKET = 266,
+     T_QUIT = 267,
+     T_FUNC = 268,
+     T_IF = 269,
+     T_TRUE = 270,
+     T_FALSE = 271,
+     T_NULL = 272,
+     T_RETURN = 273,
+     T_COMMA = 274,
+     T_COMMENT = 275,
+     T_SINGLEQOUTE = 276
    };
 #endif
 /* Tokens.  */
 #define T_INT 258
 #define T_IDENTIFIER 259
-#define T_PLUS 260
-#define T_MINUS 261
-#define T_TIMES 262
-#define T_DIVIDE 263
-#define T_LBRACKET 264
-#define T_RBRACKET 265
-#define T_QUIT 266
-#define T_FUNC 267
-#define T_IF 268
-#define T_TRUE 269
-#define T_FALSE 270
-#define T_NULL 271
-#define T_RETURN 272
-#define T_COMMA 273
-#define T_COMMENT 274
-#define T_DOUBLEQOUTE 275
+#define T_STRING 260
+#define T_PLUS 261
+#define T_MINUS 262
+#define T_TIMES 263
+#define T_DIVIDE 264
+#define T_LBRACKET 265
+#define T_RBRACKET 266
+#define T_QUIT 267
+#define T_FUNC 268
+#define T_IF 269
+#define T_TRUE 270
+#define T_FALSE 271
+#define T_NULL 272
+#define T_RETURN 273
+#define T_COMMA 274
+#define T_COMMENT 275
+#define T_SINGLEQOUTE 276
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 17 "parser.y"
+#line 19 "parser.y"
 {
 
-  int ival;
+  int integer;
 
-  int token;
-
-  char *id;
-
-  const char *string;
+  char *string;
 
   struct Expression *expression;
 
 }
 /* Line 1529 of yacc.c.  */
-#line 103 "parser.tab.h"
+#line 101 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

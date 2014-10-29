@@ -1,96 +1,84 @@
+//
+//  ast.h
+//
+//
+//  Created by William Collier on 29/10/2014.
+//
+//
+
+#ifndef _ast_h
+#define _ast_h
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-typedef enum Types {
-
-  INT,
-	
-  STRING,
-
-  OPERATOR
-
-} Types;
-
-typedef enum BinaryOperationTypes {
+typedef enum BinaryOperationType {
 
   PLUS,
-
   MINUS,
-
   TIMES,
+  DIVIDE,
 
-  DIVIDE
-  
-} BinaryOperationTypes;
-
-typedef struct Number {
-
-  int value;
-  
-} Number;
-
-typedef struct String {
-
-  const char *value;
-  
-} String;
-
-typedef struct BinaryOperator {
-
-  BinaryOperationTypes operator;
-
-  struct Expression *left;
-
-  struct Expression *right;
-  
-} BinaryOperator;
+} BinaryOperationType;
 
 typedef struct Node {
 
-  union {
+  struct Expression *expression;
 
-    struct Expression *expression;
-    
-  };
-  
 } Node;
 
 typedef struct Expression {
 
-  struct Node *left;
-	
-  struct Node *right;
+  struct Integer *integer;
 
-  Types type;
+  struct String *string;
 
-  union {
+  struct BinaryOperation *binaryOperation;
 
-    Number number;
-
-    String string;
-
-    BinaryOperator binaryOperator;
-    
-  };
-  
-  
 } Expression;
 
-Node *makeNode(void);
+typedef struct Integer {
 
-Expression *makeExpression(void);
+  int value;
 
-Expression *makeInt(int value);
+} Integer;
 
-Expression *makeString(const char *value);
+typedef struct String {
 
-Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationTypes  operatorValue);
+  const char *value;
+
+} String;
+
+typedef struct BinaryOperation {
+
+  Expression *left;
+
+  Expression *right;
+
+  BinaryOperationType type;
+
+} BinaryOperation;
+
+Node *makeEmptyNode(void);
+
+Node *makeNode(Expression *expression);
+
+Expression *makeEmptyExpression(void);
+
+Expression *makeIntegerExpression(int value);
+
+Expression *makeStringExpression(char *value);
+
+Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationType type);
 
 void deleteNode(Node *node);
 
-void printExpression(Expression *expression);
-
 void deleteExpression(Expression *expression);
 
-const char *getBinaryOperationString(BinaryOperationTypes operatorValue);
+void printNode(Node *node);
+
+void printExpression(Expression *expression);
+
+char getBinaryOperationTypeChar(BinaryOperationType type);
+
+#endif
