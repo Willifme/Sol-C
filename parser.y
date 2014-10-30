@@ -47,7 +47,7 @@
 
 %type <node> expression
 
-%type <expression> operator string boolean
+%type <expression> operator literal
 
 %start main
 
@@ -63,20 +63,19 @@ statement: T_QUIT { exit(EXIT_SUCCESS); }
          | T_COMMENT
          ;
 
-expression: operator { $$ = makeNode($1); }
-          | string { $$ = makeNode($1); }
-          | boolean { $$ = makeNode($1); }
+expression: literal { $$ = makeNode($1); }
+          | operator { $$ = makeNode($1); }
           // Get this to have expressions between the brackets
-	      | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+	        | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
-string: T_STRING { $$ = makeStringExpression($1); }
-      ;
-
-boolean: T_TRUE { $$ = makeBooleanExpression($1); }
+literal: T_INT { $$ = makeIntegerExpression($1); }
+       | T_STRING { $$ = makeStringExpression($1); }
+       | T_TRUE { $$ = makeBooleanExpression($1); }
        | T_FALSE { $$ = makeBooleanExpression($1); }
+       ;
 
-operator: T_INT { $$ = makeIntegerExpression($1); }
+operator: literal
           | operator T_PLUS operator { $$ = makeBinaryOperation($1, $3, PLUS); }
           | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
           | operator T_TIMES operator { $$ = makeBinaryOperation($1, $3, TIMES); }
