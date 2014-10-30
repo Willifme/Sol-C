@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 
+#include <stdbool.h>
 #include "parser.tab.h"
 
 #define YY_DECL extern int yylex()
@@ -30,9 +31,9 @@ SINGLEQOUTE \'
 
 "if" { return TOKEN(T_IF); }
 
-"true" { return TOKEN(T_TRUE); }
+"true" { yylval.boolean = yytext ? "true" : "false"; return T_TRUE; }
 
-"false" { return TOKEN(T_FALSE); }
+"false" { yylval.boolean = atoi(yytext); return T_FALSE; }
 
 "null" { return TOKEN(T_NULL); }
 

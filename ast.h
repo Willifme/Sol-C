@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef enum BinaryOperationType {
 
@@ -33,6 +34,8 @@ typedef struct Expression {
 
   struct String *string;
 
+  struct Boolean *boolean;
+  
   struct BinaryOperation *binaryOperation;
 
 } Expression;
@@ -48,6 +51,12 @@ typedef struct String {
   const char *value;
 
 } String;
+
+typedef struct Boolean {
+
+  bool value;
+  
+} Boolean;
 
 typedef struct BinaryOperation {
 
@@ -68,6 +77,8 @@ Expression *makeEmptyExpression(void);
 Expression *makeIntegerExpression(int value);
 
 Expression *makeStringExpression(char *value);
+
+Expression *makeBooleanExpression(bool value);
 
 Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationType type);
 

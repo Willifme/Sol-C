@@ -45,6 +45,8 @@ Expression *makeEmptyExpression(void) {
 
   newExpression->string = NULL;
 
+  newExpression->boolean = NULL;
+  
   newExpression->binaryOperation = NULL;
 
   return newExpression;
@@ -73,6 +75,18 @@ Expression *makeStringExpression(char *value) {
 
   return newString;
 
+}
+
+Expression *makeBooleanExpression(bool value) {
+
+  Expression *newBoolean = makeEmptyExpression();
+
+  newBoolean->boolean = malloc(sizeof(Boolean));
+
+  newBoolean->boolean->value = value;
+
+  return newBoolean;
+  
 }
 
 Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationType type) {
@@ -108,6 +122,9 @@ void deleteExpression(Expression *expression) {
   if (expression->string)
     free(expression->string);
 
+  if (expression->boolean)
+    free(expression->boolean);
+  
   if (expression->binaryOperation) {
 
     if (expression->binaryOperation->left)
@@ -161,6 +178,13 @@ void printExpression(Expression *expression) {
     // Hardcode for now
     printf("%s\n", expression->string->value);
 
+  }
+
+  if (expression->boolean) {
+
+    // Hardcode for now, if the value is true print 'true' else false.
+    printf("%s\n", expression->boolean->value ? "true" : "false");
+    
   }
 
   /*
