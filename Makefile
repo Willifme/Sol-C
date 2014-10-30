@@ -14,5 +14,8 @@ lex.yy.c:
 parser.tab.c:
 	bison -d parser.y
 
+parsergraph:
+	bison parser.y --graph
+
 clean:
 	rm -rf lexer lex.yy.c parser.tab.c parser.tab.h

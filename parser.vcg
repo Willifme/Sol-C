@@ -1,0 +1,481 @@
+graph: {
+	display_edge_labels:	yes
+	priority_phase:	yes
+	port_sharing:	no
+	crossing_weight:	median
+	splines:	yes
+	node: {
+		title:	"0"
+		label:	"state  0\n $accept -> . main $end"
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"2"
+		label:	"T_STRING"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"3"
+		label:	"T_TRUE"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"4"
+		label:	"T_FALSE"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"5"
+		label:	"T_LBRACKET"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"6"
+		label:	"T_QUIT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"7"
+		label:	"T_COMMENT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"8"
+		label:	"main"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"9"
+		label:	"statement"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"10"
+		label:	"expression"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"11"
+		label:	"string"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"12"
+		label:	"boolean"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"0"
+		targetname:	"13"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"1"
+		label:	"state  1\n operator -> T_INT ."
+	}
+	node: {
+		title:	"2"
+		label:	"state  2\n string -> T_STRING ."
+	}
+	node: {
+		title:	"3"
+		label:	"state  3\n boolean -> T_TRUE ."
+	}
+	node: {
+		title:	"4"
+		label:	"state  4\n boolean -> T_FALSE ."
+	}
+	node: {
+		title:	"5"
+		label:	"state  5\n expression -> T_LBRACKET . expression T_RBRACKET"
+	}
+	backedge: {
+		sourcename:	"5"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"5"
+		targetname:	"2"
+		label:	"T_STRING"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"5"
+		targetname:	"3"
+		label:	"T_TRUE"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"5"
+		targetname:	"4"
+		label:	"T_FALSE"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"5"
+		targetname:	"5"
+		label:	"T_LBRACKET"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"5"
+		targetname:	"14"
+		label:	"expression"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"5"
+		targetname:	"11"
+		label:	"string"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"5"
+		targetname:	"12"
+		label:	"boolean"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"5"
+		targetname:	"13"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"6"
+		label:	"state  6\n statement -> T_QUIT ."
+	}
+	node: {
+		title:	"7"
+		label:	"state  7\n statement -> T_COMMENT ."
+	}
+	node: {
+		title:	"8"
+		label:	"state  8\n $accept -> main . $end\n main -> main . expression\n main -> main . statement"
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"15"
+		label:	"$end"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"2"
+		label:	"T_STRING"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"3"
+		label:	"T_TRUE"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"4"
+		label:	"T_FALSE"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"5"
+		label:	"T_LBRACKET"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"6"
+		label:	"T_QUIT"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"8"
+		targetname:	"7"
+		label:	"T_COMMENT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"16"
+		label:	"statement"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"17"
+		label:	"expression"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"11"
+		label:	"string"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"12"
+		label:	"boolean"
+		color:	green
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"8"
+		targetname:	"13"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"9"
+		label:	"state  9\n main -> statement ."
+	}
+	node: {
+		title:	"10"
+		label:	"state 10\n main -> expression ."
+	}
+	node: {
+		title:	"11"
+		label:	"state 11\n expression -> string ."
+	}
+	node: {
+		title:	"12"
+		label:	"state 12\n expression -> boolean ."
+	}
+	node: {
+		title:	"13"
+		label:	"state 13\n expression -> operator .\n operator -> operator . T_PLUS operator\n operator -> operator . T_MINUS operator\n operator -> operator . T_TIMES operator\n operator -> operator . T_DIVIDE operator"
+	}
+	edge: {
+		sourcename:	"13"
+		targetname:	"18"
+		label:	"T_PLUS"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"13"
+		targetname:	"19"
+		label:	"T_MINUS"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"13"
+		targetname:	"20"
+		label:	"T_TIMES"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"13"
+		targetname:	"21"
+		label:	"T_DIVIDE"
+		color:	blue
+		textcolor:	black
+	}
+	node: {
+		title:	"14"
+		label:	"state 14\n expression -> T_LBRACKET expression . T_RBRACKET"
+	}
+	edge: {
+		sourcename:	"14"
+		targetname:	"22"
+		label:	"T_RBRACKET"
+		color:	blue
+		textcolor:	black
+	}
+	node: {
+		title:	"15"
+		label:	"state 15\n $accept -> main $end ."
+	}
+	node: {
+		title:	"16"
+		label:	"state 16\n main -> main statement ."
+	}
+	node: {
+		title:	"17"
+		label:	"state 17\n main -> main expression ."
+	}
+	node: {
+		title:	"18"
+		label:	"state 18\n operator -> operator T_PLUS . operator"
+	}
+	backedge: {
+		sourcename:	"18"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"18"
+		targetname:	"23"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"19"
+		label:	"state 19\n operator -> operator T_MINUS . operator"
+	}
+	backedge: {
+		sourcename:	"19"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"19"
+		targetname:	"24"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"20"
+		label:	"state 20\n operator -> operator T_TIMES . operator"
+	}
+	backedge: {
+		sourcename:	"20"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"20"
+		targetname:	"25"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"21"
+		label:	"state 21\n operator -> operator T_DIVIDE . operator"
+	}
+	backedge: {
+		sourcename:	"21"
+		targetname:	"1"
+		label:	"T_INT"
+		color:	blue
+		textcolor:	black
+	}
+	edge: {
+		sourcename:	"21"
+		targetname:	"26"
+		label:	"operator"
+		color:	green
+		textcolor:	black
+	}
+	node: {
+		title:	"22"
+		label:	"state 22\n expression -> T_LBRACKET expression T_RBRACKET ."
+	}
+	node: {
+		title:	"23"
+		label:	"state 23\n operator -> operator . T_PLUS operator\n operator -> operator T_PLUS operator .\n operator -> operator . T_MINUS operator\n operator -> operator . T_TIMES operator\n operator -> operator . T_DIVIDE operator"
+	}
+	backedge: {
+		sourcename:	"23"
+		targetname:	"20"
+		label:	"T_TIMES"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"23"
+		targetname:	"21"
+		label:	"T_DIVIDE"
+		color:	blue
+		textcolor:	black
+	}
+	node: {
+		title:	"24"
+		label:	"state 24\n operator -> operator . T_PLUS operator\n operator -> operator . T_MINUS operator\n operator -> operator T_MINUS operator .\n operator -> operator . T_TIMES operator\n operator -> operator . T_DIVIDE operator"
+	}
+	backedge: {
+		sourcename:	"24"
+		targetname:	"20"
+		label:	"T_TIMES"
+		color:	blue
+		textcolor:	black
+	}
+	backedge: {
+		sourcename:	"24"
+		targetname:	"21"
+		label:	"T_DIVIDE"
+		color:	blue
+		textcolor:	black
+	}
+	node: {
+		title:	"25"
+		label:	"state 25\n operator -> operator . T_PLUS operator\n operator -> operator . T_MINUS operator\n operator -> operator . T_TIMES operator\n operator -> operator T_TIMES operator .\n operator -> operator . T_DIVIDE operator"
+	}
+	node: {
+		title:	"26"
+		label:	"state 26\n operator -> operator . T_PLUS operator\n operator -> operator . T_MINUS operator\n operator -> operator . T_TIMES operator\n operator -> operator . T_DIVIDE operator\n operator -> operator T_DIVIDE operator ."
+	}
+
+
+}
