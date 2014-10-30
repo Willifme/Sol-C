@@ -14,6 +14,7 @@ ruby does not have. This is very much a work in progress with barely anything wo
 * A better Makefile (I have little experience of building them).
 * Optimisations to be made once the compiler reaches a decent stage of capability.
 * A good AST. - Partially done
+* Proper printing of the AST 
 * Someform of codegen either LibJIT or LLVM (Leaning towards LLVM).
 * Documentation which exists.
 * A furthered language design with refined features.
