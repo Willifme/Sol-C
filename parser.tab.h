@@ -86,7 +86,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "parser.y"
+#line 22 "parser.y"
 {
 
   int integer;
@@ -94,7 +94,7 @@ typedef union YYSTYPE
   char *string;
 
   bool boolean;
-  
+
   struct Node *node;
 
   struct Expression *expression;

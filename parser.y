@@ -2,9 +2,11 @@
 
   #include <stdio.h>
   #include <stdlib.h>
-  #include <stdbool.h>
   #include "ast.h"
-  
+
+  /* Note - <stbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
+  like it being included here */
+
   extern int yylex();
 
   void yyerror(const char *s);
@@ -24,7 +26,7 @@
   char *string;
 
   bool boolean;
-  
+
   struct Node *node;
 
   struct Expression *expression;
@@ -64,7 +66,7 @@ expression: operator { $$ = makeNode($1); }
           | string { $$ = makeNode($1); }
           | boolean { $$ = makeNode($1); }
             // Get this to have expressions between the brackets
-	  | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+	        | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
 string: T_STRING { $$ = makeStringExpression($1); }

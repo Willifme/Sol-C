@@ -117,9 +117,11 @@
 
   #include <stdio.h>
   #include <stdlib.h>
-  #include <stdbool.h>
   #include "ast.h"
-  
+
+  /* Note - <stbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
+  like it being included here */
+
   extern int yylex();
 
   void yyerror(const char *s);
@@ -148,7 +150,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "parser.y"
+#line 22 "parser.y"
 {
 
   int integer;
@@ -156,14 +158,14 @@ typedef union YYSTYPE
   char *string;
 
   bool boolean;
-  
+
   struct Node *node;
 
   struct Expression *expression;
 
 }
 /* Line 193 of yacc.c.  */
-#line 167 "parser.tab.c"
+#line 169 "parser.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -176,7 +178,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 180 "parser.tab.c"
+#line 182 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -465,8 +467,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    54,    55,    56,    59,    60,    63,    64,
-      65,    67,    70,    73,    74,    76,    77,    78,    79,    80
+       0,    55,    55,    56,    57,    58,    61,    62,    65,    66,
+      67,    69,    72,    75,    76,    78,    79,    80,    81,    82
 };
 #endif
 
@@ -1382,83 +1384,83 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 53 "parser.y"
+#line 55 "parser.y"
     { printNode((yyvsp[(1) - (1)].node)); deleteNode((yyvsp[(1) - (1)].node)); ;}
     break;
 
   case 4:
-#line 55 "parser.y"
+#line 57 "parser.y"
     { printNode((yyvsp[(2) - (2)].node)); deleteNode((yyvsp[(2) - (2)].node)); ;}
     break;
 
   case 6:
-#line 59 "parser.y"
+#line 61 "parser.y"
     { exit(EXIT_SUCCESS); ;}
     break;
 
   case 8:
-#line 63 "parser.y"
-    { (yyval.node) = makeNode((yyvsp[(1) - (1)].expression)); ;}
-    break;
-
-  case 9:
-#line 64 "parser.y"
-    { (yyval.node) = makeNode((yyvsp[(1) - (1)].expression)); ;}
-    break;
-
-  case 10:
 #line 65 "parser.y"
     { (yyval.node) = makeNode((yyvsp[(1) - (1)].expression)); ;}
     break;
 
-  case 11:
+  case 9:
+#line 66 "parser.y"
+    { (yyval.node) = makeNode((yyvsp[(1) - (1)].expression)); ;}
+    break;
+
+  case 10:
 #line 67 "parser.y"
+    { (yyval.node) = makeNode((yyvsp[(1) - (1)].expression)); ;}
+    break;
+
+  case 11:
+#line 69 "parser.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); ;}
     break;
 
   case 12:
-#line 70 "parser.y"
+#line 72 "parser.y"
     { (yyval.expression) = makeStringExpression((yyvsp[(1) - (1)].string)); ;}
     break;
 
   case 13:
-#line 73 "parser.y"
+#line 75 "parser.y"
     { (yyval.expression) = makeBooleanExpression((yyvsp[(1) - (1)].boolean)); ;}
     break;
 
   case 14:
-#line 74 "parser.y"
+#line 76 "parser.y"
     { (yyval.expression) = makeBooleanExpression((yyvsp[(1) - (1)].boolean)); ;}
     break;
 
   case 15:
-#line 76 "parser.y"
+#line 78 "parser.y"
     { (yyval.expression) = makeIntegerExpression((yyvsp[(1) - (1)].integer)); ;}
     break;
 
   case 16:
-#line 77 "parser.y"
+#line 79 "parser.y"
     { (yyval.expression) = makeBinaryOperation((yyvsp[(1) - (3)].expression), (yyvsp[(3) - (3)].expression), PLUS); ;}
     break;
 
   case 17:
-#line 78 "parser.y"
+#line 80 "parser.y"
     { (yyval.expression) = makeBinaryOperation((yyvsp[(1) - (3)].expression), (yyvsp[(3) - (3)].expression), MINUS); ;}
     break;
 
   case 18:
-#line 79 "parser.y"
+#line 81 "parser.y"
     { (yyval.expression) = makeBinaryOperation((yyvsp[(1) - (3)].expression), (yyvsp[(3) - (3)].expression), TIMES); ;}
     break;
 
   case 19:
-#line 80 "parser.y"
+#line 82 "parser.y"
     { (yyval.expression) = makeBinaryOperation((yyvsp[(1) - (3)].expression), (yyvsp[(3) - (3)].expression), DIVIDE); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1462 "parser.tab.c"
+#line 1464 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1672,7 +1674,7 @@ yyreturn:
 }
 
 
-#line 83 "parser.y"
+#line 85 "parser.y"
 
 
 void yyerror(const char *s) {

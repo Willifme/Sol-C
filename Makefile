@@ -3,7 +3,7 @@ CFLAGS=-o lexer
 LIBS= -ledit
 
 all: sol
-	./lexer
+	./lexer ${ARGS}
 
 sol: ${SRC}
 	clang ${SRC} ${LIBS} ${CFLAGS}
