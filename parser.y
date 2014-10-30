@@ -43,6 +43,7 @@
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
+%nonassoc UMINUS
 
 %type <node> expression
 
@@ -65,8 +66,8 @@ statement: T_QUIT { exit(EXIT_SUCCESS); }
 expression: operator { $$ = makeNode($1); }
           | string { $$ = makeNode($1); }
           | boolean { $$ = makeNode($1); }
-            // Get this to have expressions between the brackets
-	        | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+          // Get this to have expressions between the brackets
+	      | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
 string: T_STRING { $$ = makeStringExpression($1); }
@@ -87,7 +88,5 @@ operator: T_INT { $$ = makeIntegerExpression($1); }
 void yyerror(const char *s) {
 
   fprintf(stderr, "Error: %s\n", s);
-
-  exit(EXIT_FAILURE);
 
 }
