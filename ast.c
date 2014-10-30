@@ -133,8 +133,6 @@ void deleteExpression(Expression *expression) {
     if (expression->binaryOperation->right)
       deleteExpression(expression->binaryOperation->right);
 
-    // If the left and right are freed delete the struct all together
-
     free(expression->binaryOperation);
 
   }
@@ -142,8 +140,6 @@ void deleteExpression(Expression *expression) {
   free(expression);
 
 }
-
-static int indentLevel = 0;
 
 void printNode(Node *node) {
 
@@ -156,20 +152,10 @@ void printNode(Node *node) {
 
 void printExpression(Expression *expression) {
 
-  // Reverse this
-
-  for (int i = 0; i < indentLevel; i++) {
-
-    printf("\t");
-
-  }
-
   if (expression->integer) {
 
     // Hardcode for now
     printf("%d\n", expression->integer->value);
-
-    indentLevel += 1;
 
   }
 
@@ -184,21 +170,19 @@ void printExpression(Expression *expression) {
 
     // Hardcode for now, if the value is true print 'true' else false.
     printf("%s\n", expression->boolean->value ? "true" : "false");
-    
+
   }
 
-  /*
-    if(getBinaryOperationTypeChar(expression->binaryOperation->type)) {
-
-    printf("%c\n", getBinaryOperationTypeChar(expression->binaryOperation->type));
-
-
-    }
-  */
   if (expression->binaryOperation) {
 
     if (expression->binaryOperation->left)
       printExpression(expression->binaryOperation->left);
+
+    if(getBinaryOperationTypeChar(expression->binaryOperation->type)) {
+
+      printf("%c\n", getBinaryOperationTypeChar(expression->binaryOperation->type));
+
+    }
 
     if (expression->binaryOperation->right)
       printExpression(expression->binaryOperation->right);

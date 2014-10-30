@@ -35,7 +35,7 @@ ANYTHING [^(\"|')]
 
 "if" { return TOKEN(T_IF); }
 
-"true" { yylval.boolean = yytext ? "true" : "false"; return T_TRUE; }
+"true" { yylval.boolean = yytext ? true : false; return T_TRUE; }
 
 "false" { yylval.boolean = atoi(yytext); return T_FALSE; }
 
@@ -66,26 +66,11 @@ ANYTHING [^(\"|')]
 
 "/*" { BEGIN(COMMENT); }
 
-<INITIAL>{
+<COMMENT>"*/" { BEGIN(INITIAL); }
 
-  "/*"  BEGIN(COMMENT);
+<COMMENT>{ANYTHING} { return TOKEN(T_COMMENT); }
 
-}
-
-<COMMENT>{
-
-  "*/"  BEGIN(INITIAL);
-
-  [^*\n]+ // Eat the rest of the comment
-
-  "*" // Eat the last start
-
-  \n return TOKEN(T_COMMENT);
-
-
-}
-
-[ \t\n]+ { yylineno += 1; }
+[ \t\n]+ {  }
 
 . { printf("Unrecognised character \"%s\" at line %d\n", yytext, yylineno); yyterminate(); }
 
