@@ -18,5 +18,8 @@ parsergraph:
 	bison parser.y --graph=graph.dot
 	xdot graph.dot
 
+parserdebug:
+	bison parser.y -v
+
 clean:
-	rm -rf lexer lex.yy.c parser.tab.c parser.tab.h
+	rm -rf lexer lex.yy.c parser.tab.c parser.tab.h graph.dot parser.out

@@ -29,6 +29,8 @@
 
   struct Node *node;
 
+  struct Statement *statement;
+
   struct Expression *expression;
 
 }
@@ -38,35 +40,48 @@
 %token <boolean> T_TRUE T_FALSE
 
 %token <token> T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
-%token <token> T_QUIT T_FUNC T_IF T_NULL
-%token <token> T_RETURN T_COMMA T_COMMENT T_SINGLEQOUTE
+%token <token> T_QUIT T_FUNC T_IF T_NULL T_LSQUIGBRACKET T_RSQUIGBRACKET
+%token <token> T_RETURN T_COMMA T_COMMENT
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
-%nonassoc UMINUS
 
-%type <node> expression
+%type <node> main statements expressions
 
-%type <expression> operator literal
+%type <statement> statement func 
+
+%type <expression> expression operator literal block
 
 %start main
 
 %%
 
-main: expression { printNode($1); deleteNode($1); }
-    | statement
-    | main expression { printNode($2); deleteNode($2); }
-    | main statement
+main: expressions
+    | statements
+	  | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
+	  | T_COMMENT  {} // Comments need to be properly fixed however.
     ;
 
-statement: T_QUIT { exit(EXIT_SUCCESS); }
-         | T_COMMENT
+statements: statement { $$ = makeStatementNode($1); printNode($$); deleteNode($$); }
+					| statements statement { $$ = makeStatementNode($2); printNode($$); deleteNode($$); }
+
+statement: func
          ;
 
-expression: literal { $$ = makeNode($1); }
-          | operator { $$ = makeNode($1); }
+func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($5); }
+    ;
+
+block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
+     ;
+
+expressions: expression { $$ = makeExpressionNode($1); printNode($$); deleteNode($$); }
+					 | expressions expression	{ $$ = makeExpressionNode($2); printNode($$); deleteNode($$); }
+           ;
+
+expression: literal
+          | operator 
           // Get this to have expressions between the brackets
-	        | T_LBRACKET expression T_RBRACKET { $$ = $2; }
+	  			| T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
 literal: T_INT { $$ = makeIntegerExpression($1); }
@@ -75,12 +90,11 @@ literal: T_INT { $$ = makeIntegerExpression($1); }
        | T_FALSE { $$ = makeBooleanExpression($1); }
        ;
 
-operator: literal
-          | operator T_PLUS operator { $$ = makeBinaryOperation($1, $3, PLUS); }
-          | operator T_MINUS operator { $$ = makeBinaryOperation($1, $3, MINUS); }
-          | operator T_TIMES operator { $$ = makeBinaryOperation($1, $3, TIMES); }
-          | operator T_DIVIDE operator { $$ = makeBinaryOperation($1, $3, DIVIDE); }
-          ;
+operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS); }
+        | expression T_MINUS expression { $$ = makeBinaryOperation($1, $3, MINUS); }
+        | expression T_TIMES expression { $$ = makeBinaryOperation($1, $3, TIMES); }
+        | expression T_DIVIDE expression { $$ = makeBinaryOperation($1, $3, DIVIDE); }
+        ;
 
 %%
 

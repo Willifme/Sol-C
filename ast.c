@@ -21,12 +21,47 @@ Node *makeEmptyNode(void) {
   Node *node = malloc(sizeof(Node));
 
   node->expression = makeEmptyExpression();
+  
+  node->statement = makeEmptyStatement();
 
   return node;
 
 }
 
-Node *makeNode(Expression *expression) {
+Node *makeStatementNode(Statement *statement) {
+
+	Node *node = malloc(sizeof(Node));
+	
+	if(statement)
+		node->statement = statement;
+	
+	return node;
+	
+}
+
+Statement *makeEmptyStatement(void) {
+
+	Statement *newStatement = malloc(sizeof(Statement));
+	
+	newStatement->func = NULL;
+	
+	return newStatement;
+	
+}
+
+Statement *makeFuncStatement(Expression *expression) {
+
+	Statement *newFunc = makeEmptyStatement();
+	
+	newFunc->func = malloc(sizeof(Func));
+	
+	newFunc->func->expression = expression;
+	
+	return newFunc;
+		
+}
+
+Node *makeExpressionNode(Expression *expression) {
 
   Node *node = malloc(sizeof(Node));
 
@@ -110,8 +145,26 @@ void deleteNode(Node *node) {
   if (node->expression)
     deleteExpression(node->expression);
 
+  if (node->statement)
+	  deleteStatement(node->statement);
+
   free(node);
 
+}
+
+
+void deleteStatement(Statement *statement) {
+	
+	if (statement->func) {
+		
+		deleteExpression(statement->func->expression);
+		
+		free(statement->func);
+	
+	}
+	
+	free(statement);
+	
 }
 
 void deleteExpression(Expression *expression) {
@@ -143,11 +196,19 @@ void deleteExpression(Expression *expression) {
 
 void printNode(Node *node) {
 
-  if (node->expression) {
+  if (node->expression)
+		printExpression(node->expression);
 
-    printExpression(node->expression);
+	if (node->statement)
+		printStatement(node->statement);
+  
+}
 
-  }
+void printStatement(Statement *statement) {
+	
+	if (statement->func)
+		printExpression(statement->func->expression);
+	
 }
 
 void printExpression(Expression *expression) {

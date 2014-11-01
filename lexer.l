@@ -62,6 +62,10 @@ ANYTHING [^(\"|')]
 
 ")" { return TOKEN(T_RBRACKET); }
 
+"{" { return TOKEN(T_LSQUIGBRACKET); }
+
+"}" { return TOKEN(T_RSQUIGBRACKET); }
+
 "//"{ANYTHING}+ { return TOKEN(T_COMMENT); }
 
 "/*" { BEGIN(COMMENT); }

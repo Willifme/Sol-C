@@ -26,7 +26,21 @@ typedef struct Node {
 
   struct Expression *expression;
 
+  struct Statement *statement;
+
 } Node;
+
+typedef struct Statement {
+	
+	struct Func *func;
+	
+} Statement;
+
+typedef struct Func {
+	
+	struct Expression *expression;
+	
+} Func;
 
 typedef struct Expression {
 
@@ -70,7 +84,13 @@ typedef struct BinaryOperation {
 
 Node *makeEmptyNode(void);
 
-Node *makeNode(Expression *expression);
+Node *makeStatementNode(Statement *statement);
+
+Statement *makeEmptyStatement(void);
+
+Statement *makeFuncStatement(Expression *expression);
+
+Node *makeExpressionNode(Expression *expression);
 
 Expression *makeEmptyExpression(void);
 
@@ -84,9 +104,13 @@ Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOpera
 
 void deleteNode(Node *node);
 
+void deleteStatement(Statement *statement);
+
 void deleteExpression(Expression *expression);
 
 void printNode(Node *node);
+
+void printStatement(Statement *statement);
 
 void printExpression(Expression *expression);
 
