@@ -30,34 +30,38 @@ Node *makeEmptyNode(void) {
 
 Node *makeStatementNode(Statement *statement) {
 
-	Node *node = malloc(sizeof(Node));
+  Node *node = malloc(sizeof(Node));
 	
-	if(statement)
-		node->statement = statement;
+  if(statement)
+    node->statement = statement;
 	
-	return node;
+  return node;
 	
 }
 
 Statement *makeEmptyStatement(void) {
 
-	Statement *newStatement = malloc(sizeof(Statement));
+  Statement *newStatement = malloc(sizeof(Statement));
 	
-	newStatement->func = NULL;
+  newStatement->func = NULL;
 	
-	return newStatement;
+  return newStatement;
 	
 }
 
-Statement *makeFuncStatement(Expression *expression) {
+Statement *makeFuncStatement(Expression *expression, ...) {
 
-	Statement *newFunc = makeEmptyStatement();
+  Statement *newFunc = makeEmptyStatement();
 	
-	newFunc->func = malloc(sizeof(Func));
+  newFunc->func = malloc(sizeof(Func));
 	
-	newFunc->func->expression = expression;
-	
-	return newFunc;
+  newFunc->func->expression = expression;
+
+  va_list ap;
+
+  va_start(ap, expression);
+
+  return newFunc;
 		
 }
 
@@ -155,15 +159,15 @@ void deleteNode(Node *node) {
 
 void deleteStatement(Statement *statement) {
 	
-	if (statement->func) {
+  if (statement->func) {
 		
-		deleteExpression(statement->func->expression);
+    deleteExpression(statement->func->expression);
 		
-		free(statement->func);
+    free(statement->func);
 	
-	}
+  }
 	
-	free(statement);
+  free(statement);
 	
 }
 
@@ -197,17 +201,17 @@ void deleteExpression(Expression *expression) {
 void printNode(Node *node) {
 
   if (node->expression)
-		printExpression(node->expression);
+    printExpression(node->expression);
 
-	if (node->statement)
-		printStatement(node->statement);
+  if (node->statement)
+    printStatement(node->statement);
   
 }
 
 void printStatement(Statement *statement) {
 	
-	if (statement->func)
-		printExpression(statement->func->expression);
+  if (statement->func)
+    printExpression(statement->func->expression);
 	
 }
 

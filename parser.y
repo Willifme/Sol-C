@@ -1,19 +1,19 @@
 %{
 
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include "ast.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "ast.h"
 
   /* Note - <stbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
-  like it being included here */
+     like it being included here */
 
   extern int yylex();
 
   void yyerror(const char *s);
 
-//  #define YYSTYPE struct Expression *
+  //  #define YYSTYPE struct Expression *
 
-%}
+  %}
 
 // This allows for good error messages to be called with yyerror();
 
@@ -58,12 +58,12 @@
 
 main: expressions
     | statements
-	  | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
-	  | T_COMMENT  {} // Comments need to be properly fixed however.
+    | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
+    | T_COMMENT  {} // Comments need to be properly fixed however.
     ;
 
 statements: statement { $$ = makeStatementNode($1); printNode($$); deleteNode($$); }
-					| statements statement { $$ = makeStatementNode($2); printNode($$); deleteNode($$); }
+          | statements statement { $$ = makeStatementNode($2); printNode($$); deleteNode($$); }
 
 statement: func
          ;
@@ -72,16 +72,17 @@ func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($
     ;
 
 block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
+| T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
      ;
 
 expressions: expression { $$ = makeExpressionNode($1); printNode($$); deleteNode($$); }
-					 | expressions expression	{ $$ = makeExpressionNode($2); printNode($$); deleteNode($$); }
+           | expressions expression { $$ = makeExpressionNode($2); printNode($$); deleteNode($$); }
            ;
 
 expression: literal
           | operator 
           // Get this to have expressions between the brackets
-	  			| T_LBRACKET expression T_RBRACKET { $$ = $2; }
+          | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
 literal: T_INT { $$ = makeIntegerExpression($1); }

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 typedef enum BinaryOperationType {
 
@@ -88,7 +89,7 @@ Node *makeStatementNode(Statement *statement);
 
 Statement *makeEmptyStatement(void);
 
-Statement *makeFuncStatement(Expression *expression);
+Statement *makeFuncStatement(Expression *expression, ...);
 
 Node *makeExpressionNode(Expression *expression);
 
