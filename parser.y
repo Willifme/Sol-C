@@ -2,9 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "ast.h"
 
-  /* Note - <stbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
+  /* Note - <stdbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
      like it being included here */
 
   extern int yylex();
@@ -23,9 +24,13 @@
 
   int integer;
 
+  // I think this causes 6 bytes to be lost! how do I free it?
+
   char *string;
 
   bool boolean;
+
+  // VALUE value;
 
   struct Node *node;
 
@@ -37,11 +42,11 @@
 
 %token <integer> T_INT
 %token <string> T_IDENTIFIER T_STRING
-%token <boolean> T_TRUE T_FALSE
+%token <value> T_NULL
 
 %token <token> T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
-%token <token> T_QUIT T_FUNC T_IF T_NULL T_LSQUIGBRACKET T_RSQUIGBRACKET
-%token <token> T_RETURN T_COMMA T_COMMENT
+%token <token> T_QUIT T_FUNC T_IF T_LSQUIGBRACKET T_RSQUIGBRACKET
+%token <token> T_RETURN T_COMMA T_COMMENT T_TRUE T_FALSE
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
@@ -58,7 +63,7 @@
 
 main: expressions
     | statements
-    | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
+| T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
     | T_COMMENT  {} // Comments need to be properly fixed however.
     ;
 
@@ -72,7 +77,7 @@ func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($
     ;
 
 block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
-| T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
+     | T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
      ;
 
 expressions: expression { $$ = makeExpressionNode($1); printNode($$); deleteNode($$); }
@@ -87,8 +92,9 @@ expression: literal
 
 literal: T_INT { $$ = makeIntegerExpression($1); }
        | T_STRING { $$ = makeStringExpression($1); }
-       | T_TRUE { $$ = makeBooleanExpression($1); }
-       | T_FALSE { $$ = makeBooleanExpression($1); }
+       | T_TRUE { $$ = makeBooleanExpression(true); }
+       | T_FALSE { $$ = makeBooleanExpression(false); }
+       | T_NULL { $$ = makeNullExpression(); }
        ;
 
 operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS); }

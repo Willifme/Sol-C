@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
   
     FILE *openFile = fopen(argv[1], "r");
 
-    // Checks if the file can be open if not exit with a error.n
+    // Checks if the file can be open if not exit with a error
     
     if (!openFile) {
 
@@ -27,6 +27,10 @@ int main(int argc, char *argv[]) {
       yyparse();
     
     } while (!feof(yyin));
+
+    // I think this is neccessary 
+
+    fclose(openFile);
 
   } else {
 

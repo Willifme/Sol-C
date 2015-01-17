@@ -1,18 +1,24 @@
-//
-//  ast.h
-//
-//
-//  Created by William Collier on 29/10/2014.
-//
-//
-
-#ifndef _ast_h
-#define _ast_h
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <stdarg.h>
+
+#ifdef DEBUG
+
+#define log_info(M, ...) fprintf(stderr, "[INFO] (%s:%d) " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+
+#else
+
+// How else can I handle a undefined macro? apart from part redefining it?
+#define log_info(M, ...)
+
+#endif
+
+typedef enum AstNodeType {
+
+  TYPE_INTEGER,
+  TYPE_CHAR,
+  TYPE_BINARYOPERATION,
+
+} AstNodeType;
 
 typedef enum BinaryOperationType {
 
@@ -27,31 +33,17 @@ typedef struct Node {
 
   struct Expression *expression;
 
-  struct Statement *statement;
+  AstNodeType type;
 
 } Node;
-
-typedef struct Statement {
-	
-	struct Func *func;
-	
-} Statement;
-
-typedef struct Func {
-	
-	struct Expression *expression;
-	
-} Func;
 
 typedef struct Expression {
 
   struct Integer *integer;
 
-  struct String *string;
+  struct Character *character;
 
-  struct Boolean *boolean;
-  
-  struct BinaryOperation *binaryOperation;
+  struct BinaryOperation *binOperation;
 
 } Expression;
 
@@ -61,60 +53,40 @@ typedef struct Integer {
 
 } Integer;
 
-typedef struct String {
+typedef struct Character {
 
-  const char *value;
+  char value;
 
-} String;
-
-typedef struct Boolean {
-
-  bool value;
-  
-} Boolean;
+} Character;
 
 typedef struct BinaryOperation {
 
-  Expression *left;
+  struct Node *left, *right;
 
-  Expression *right;
-
-  BinaryOperationType type;
+  BinaryOperationType binOperationType;
 
 } BinaryOperation;
 
-Node *makeEmptyNode(void);
-
-Node *makeStatementNode(Statement *statement);
-
-Statement *makeEmptyStatement(void);
-
-Statement *makeFuncStatement(Expression *expression, ...);
+Node *makeNode(void);
 
 Node *makeExpressionNode(Expression *expression);
 
-Expression *makeEmptyExpression(void);
+Expression *makeExpression(void);
 
-Expression *makeIntegerExpression(int value);
+Node *makeInteger(int value);
 
-Expression *makeStringExpression(char *value);
+Node *makeCharacter(char value);
 
-Expression *makeBooleanExpression(bool value);
-
-Expression *makeBinaryOperation(Expression *left, Expression *right, BinaryOperationType type);
-
-void deleteNode(Node *node);
-
-void deleteStatement(Statement *statement);
-
-void deleteExpression(Expression *expression);
+Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type);
 
 void printNode(Node *node);
 
-void printStatement(Statement *statement);
-
 void printExpression(Expression *expression);
 
-char getBinaryOperationTypeChar(BinaryOperationType type);
+void deleteNode(Node *node);
 
-#endif
+void deleteExpression(Expression *expression);
+
+const char *getBinaryOperationChar(BinaryOperationType type);
+
+const char *getAstNodeTypeString(AstNodeType type);
