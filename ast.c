@@ -1,5 +1,5 @@
 #include "ast.h"
-
+/*
 int main(void) {
    
   // Expression *integer = makeBinaryOperation(makeInteger(1), makeBinaryOperation(makeInteger(10), makeInteger(1), PLUS), PLUS);
@@ -11,7 +11,7 @@ int main(void) {
   /* Node *integer = makeBinaryOperation(makeInteger(1),  makeBinaryOperation(makeInteger(1), makeInteger(1), MINUS), PLUS); */
 
   //  Node *integer = makeBinaryOperation(makeInteger(1),  NULL, PLUS);
-
+/*
   Node *integer = makeBinaryOperation(makeInteger(1), makeBinaryOperation(makeInteger(2),
                                                                           makeInteger(3), MINUS), PLUS);
   
@@ -24,7 +24,7 @@ int main(void) {
   return 0;
 
 }
-
+*/
 Node *makeNode(void) {
 
   Node *node = malloc(sizeof(Node));
@@ -54,6 +54,10 @@ Expression *makeExpression(void) {
   expression->integer = NULL;
 
   expression->character = NULL;
+
+  expression->string = NULL;
+
+  expression->boolean = NULL;
 
   expression->binOperation = NULL;
 
@@ -90,6 +94,47 @@ Node *makeCharacter(char value) {
   node->expression->character->value = value;
 
   node->type = TYPE_CHAR;
+
+  log_info("Allocating %s", getAstNodeTypeString(node->type));
+
+  return node;
+
+}
+
+Node *makeString(char *value) {
+
+  Node *node = makeNode();
+
+  node->expression = makeExpression();
+
+  node->expression->string = malloc(sizeof(String));
+
+  // GAHH pointers !*& - I am guessing with this
+
+  node->expression->string->value = value;
+
+  node->type = TYPE_STRING;
+
+  log_info("Allocating %s", getAstNodeTypeString(node->type));
+
+  // I dunno
+  //  free(value);
+
+  return node;
+
+}
+
+Node *makeBoolean(bool value) {
+
+  Node *node = makeNode();
+
+  node->expression = makeExpression();
+
+  node->expression->boolean = malloc(sizeof(Boolean));
+
+  node->expression->boolean->value = value;
+
+  node->type = TYPE_BOOLEAN;
 
   log_info("Allocating %s", getAstNodeTypeString(node->type));
 
@@ -139,8 +184,7 @@ void printNode(Node *node) {
 
     printExpression(node->expression);
 
-  } 
-
+  }
 }
 
 void printExpression(Expression *expression) {
@@ -164,6 +208,14 @@ void printExpression(Expression *expression) {
 
   if (expression->character != NULL)
     printf("'%c'\n", expression->character->value);
+
+  if (expression->string != NULL)
+    printf("'%s'\n", expression->string->value);
+  
+  if (expression->boolean != NULL)
+    // Boolean's cannot be printed in C directly
+    printf("'%s'\n", expression->boolean->value ? "true" : "false");
+
 }
 
 void deleteNode(Node *node) {
@@ -196,6 +248,22 @@ void deleteExpression(Expression *expression) {
     free(expression->character);
 		
     log_info("Freed CharacterExpression");
+
+  }
+
+  if (expression->string) {
+
+    free(expression->string);
+
+    log_info("Freed StringExpression");
+
+  }
+
+  if (expression->boolean) {
+    
+    free(expression->boolean);
+
+    log_info("Freed BooleanExpression");
 
   }
 
@@ -284,6 +352,18 @@ const char *getAstNodeTypeString(AstNodeType type) {
     case TYPE_CHAR:
 
       return "CharacterExpression";
+
+      break;
+
+    case TYPE_STRING:
+
+      return "StringExpression";
+
+      break;
+
+    case TYPE_BOOLEAN:
+
+      return "BooleanExpression";
 
       break;
 

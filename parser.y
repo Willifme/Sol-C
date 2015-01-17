@@ -30,58 +30,49 @@
 
   bool boolean;
 
-  // VALUE value;
-
   struct Node *node;
 
-  struct Statement *statement;
+  // struct Statement *statement;
 
-  struct Expression *expression;
+  // struct Expression *expression;
 
 }
 
 %token <integer> T_INT
 %token <string> T_IDENTIFIER T_STRING
-%token <value> T_NULL
+%token <boolean> T_FALSE T_TRUE
 
 %token <token> T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
 %token <token> T_QUIT T_FUNC T_IF T_LSQUIGBRACKET T_RSQUIGBRACKET
-%token <token> T_RETURN T_COMMA T_COMMENT T_TRUE T_FALSE
+%token <token> T_RETURN T_COMMA T_COMMENT T_NULL
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
-%type <node> main statements expressions
+%type <node> main expressions expression operator literal 
 
-%type <statement> statement func 
+//%type <statement> statement func 
 
-%type <expression> expression operator literal block
+//%type <expression> expression operator literal block
 
 %start main
 
 %%
 
 main: expressions
-    | statements
-| T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
+    | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
     | T_COMMENT  {} // Comments need to be properly fixed however.
     ;
-
-statements: statement { $$ = makeStatementNode($1); printNode($$); deleteNode($$); }
-          | statements statement { $$ = makeStatementNode($2); printNode($$); deleteNode($$); }
-
-statement: func
-         ;
-
+/*
 func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($5); }
     ;
 
 block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
      | T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
      ;
-
-expressions: expression { $$ = makeExpressionNode($1); printNode($$); deleteNode($$); }
-           | expressions expression { $$ = makeExpressionNode($2); printNode($$); deleteNode($$); }
+*/
+expressions: expression { $$ = $1; printNode($$); deleteNode($$); }
+           | expressions expression { $$ = $2; printNode($$); deleteNode($$); }
            ;
 
 expression: literal
@@ -90,12 +81,12 @@ expression: literal
           | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
 
-literal: T_INT { $$ = makeIntegerExpression($1); }
-       | T_STRING { $$ = makeStringExpression($1); }
-       | T_TRUE { $$ = makeBooleanExpression($1); }
-       | T_FALSE { $$ = makeBooleanExpression($1); }
+literal: T_INT { $$ = makeInteger($1); }
+       | T_STRING { $$ = makeString($1); }
+       | T_TRUE { $$ = makeBoolean($1); }
+       | T_FALSE { $$ = makeBoolean($1); }
        // Assume that null is false
-       | T_NULL { $$ = makeBooleanExpression(false); }	
+       | T_NULL { $$ = makeBoolean(false); }	
        ;
 
 operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS); }
