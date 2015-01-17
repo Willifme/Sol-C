@@ -53,12 +53,12 @@
      T_QUIT = 269,
      T_FUNC = 270,
      T_IF = 271,
-     T_NULL = 272,
-     T_LSQUIGBRACKET = 273,
-     T_RSQUIGBRACKET = 274,
-     T_RETURN = 275,
-     T_COMMA = 276,
-     T_COMMENT = 277
+     T_LSQUIGBRACKET = 272,
+     T_RSQUIGBRACKET = 273,
+     T_RETURN = 274,
+     T_COMMA = 275,
+     T_COMMENT = 276,
+     T_NULL = 277
    };
 #endif
 /* Tokens.  */
@@ -76,12 +76,12 @@
 #define T_QUIT 269
 #define T_FUNC 270
 #define T_IF 271
-#define T_NULL 272
-#define T_LSQUIGBRACKET 273
-#define T_RSQUIGBRACKET 274
-#define T_RETURN 275
-#define T_COMMA 276
-#define T_COMMENT 277
+#define T_LSQUIGBRACKET 272
+#define T_RSQUIGBRACKET 273
+#define T_RETURN 274
+#define T_COMMA 275
+#define T_COMMENT 276
+#define T_NULL 277
 
 
 

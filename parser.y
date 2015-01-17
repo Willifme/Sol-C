@@ -40,8 +40,8 @@
 %token <boolean> T_TRUE T_FALSE
 
 %token <token> T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
-%token <token> T_QUIT T_FUNC T_IF T_NULL T_LSQUIGBRACKET T_RSQUIGBRACKET
-%token <token> T_RETURN T_COMMA T_COMMENT
+%token <token> T_QUIT T_FUNC T_IF T_LSQUIGBRACKET T_RSQUIGBRACKET
+%token <token> T_RETURN T_COMMA T_COMMENT T_NULL
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
@@ -72,7 +72,7 @@ func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($
     ;
 
 block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
-| T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
+     | T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
      ;
 
 expressions: expression { $$ = makeExpressionNode($1); printNode($$); deleteNode($$); }
@@ -89,7 +89,9 @@ literal: T_INT { $$ = makeIntegerExpression($1); }
        | T_STRING { $$ = makeStringExpression($1); }
        | T_TRUE { $$ = makeBooleanExpression($1); }
        | T_FALSE { $$ = makeBooleanExpression($1); }
-       ;
+       // Assume that null is false
+       | T_NULL { $$ = makeBooleanExpression(false); }	
+  	   ;
 
 operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS); }
         | expression T_MINUS expression { $$ = makeBinaryOperation($1, $3, MINUS); }
