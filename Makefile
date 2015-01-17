@@ -3,7 +3,6 @@ CFLAGS=-o lexer -Wall -ggdb
 LIBS= -ledit
 
 all: sol
-	./lexer ${ARGS}
 
 sol: ${SRC}
 	clang ${SRC} ${LIBS} ${CFLAGS}

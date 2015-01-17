@@ -42,60 +42,64 @@
      T_INT = 258,
      T_IDENTIFIER = 259,
      T_STRING = 260,
-     T_TRUE = 261,
-     T_FALSE = 262,
-     T_PLUS = 263,
-     T_MINUS = 264,
-     T_TIMES = 265,
-     T_DIVIDE = 266,
-     T_LBRACKET = 267,
-     T_RBRACKET = 268,
-     T_QUIT = 269,
-     T_FUNC = 270,
-     T_IF = 271,
-     T_LSQUIGBRACKET = 272,
-     T_RSQUIGBRACKET = 273,
-     T_RETURN = 274,
-     T_COMMA = 275,
-     T_COMMENT = 276,
-     T_NULL = 277
+     T_NULL = 261,
+     T_PLUS = 262,
+     T_MINUS = 263,
+     T_TIMES = 264,
+     T_DIVIDE = 265,
+     T_LBRACKET = 266,
+     T_RBRACKET = 267,
+     T_QUIT = 268,
+     T_FUNC = 269,
+     T_IF = 270,
+     T_LSQUIGBRACKET = 271,
+     T_RSQUIGBRACKET = 272,
+     T_RETURN = 273,
+     T_COMMA = 274,
+     T_COMMENT = 275,
+     T_TRUE = 276,
+     T_FALSE = 277
    };
 #endif
 /* Tokens.  */
 #define T_INT 258
 #define T_IDENTIFIER 259
 #define T_STRING 260
-#define T_TRUE 261
-#define T_FALSE 262
-#define T_PLUS 263
-#define T_MINUS 264
-#define T_TIMES 265
-#define T_DIVIDE 266
-#define T_LBRACKET 267
-#define T_RBRACKET 268
-#define T_QUIT 269
-#define T_FUNC 270
-#define T_IF 271
-#define T_LSQUIGBRACKET 272
-#define T_RSQUIGBRACKET 273
-#define T_RETURN 274
-#define T_COMMA 275
-#define T_COMMENT 276
-#define T_NULL 277
+#define T_NULL 261
+#define T_PLUS 262
+#define T_MINUS 263
+#define T_TIMES 264
+#define T_DIVIDE 265
+#define T_LBRACKET 266
+#define T_RBRACKET 267
+#define T_QUIT 268
+#define T_FUNC 269
+#define T_IF 270
+#define T_LSQUIGBRACKET 271
+#define T_RSQUIGBRACKET 272
+#define T_RETURN 273
+#define T_COMMA 274
+#define T_COMMENT 275
+#define T_TRUE 276
+#define T_FALSE 277
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 22 "parser.y"
+#line 23 "parser.y"
 {
 
   int integer;
 
+  // I think this causes 6 bytes to be lost! how do I free it?
+
   char *string;
 
   bool boolean;
+
+  // VALUE value;
 
   struct Node *node;
 
@@ -105,7 +109,7 @@ typedef union YYSTYPE
 
 }
 /* Line 1529 of yacc.c.  */
-#line 109 "parser.tab.h"
+#line 113 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

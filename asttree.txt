@@ -1,0 +1,64 @@
+// 1+2-3
+ 
+BinaryOperation '+'
+| - IntegerExpression '1'
+| - BinaryOperation '-'
+    | - IntegerExpression '2'
+    | - IntegerExpression '3'
+;
+// hello('Hello')
+ 
+FuncCallExpression 'hello'
+| - StringExpression 'Hello'
+;
+ 
+// func hello(name: String) -> String { print(name) return name }
+FuncDecExpression Name: 'hello' Args: [name: StringExpression] Return: StringExpression
+| - Block
+    | - FuncCallExpression 'print'
+        | - StringExpression name
+    | - ReturnExpression name
+;
+ 
+/*
+ 
+func test(example: Func(i: Int) -> Int)) {
+ 
+        example(10)
+ 
+}
+ 
+*/
+FuncDecExpression Name: 'test' Args: [example: FuncDecExpression(Args: [i: IntegerExpression] Return: IntegerExpression)]
+| - Block
+    | - FuncCallExpression 'example'
+        | - IntegerExpression '10'
+;
+ 
+/* test(Func(i: Int) -> Int {
+ 
+        return i
+ 
+}) */
+ 
+FuncCallExpression 'test'
+| - Block
+    | - FuncDecExpression Name: Null Args: [i: IntegerExpression] Return: IntegerExpression
+        | - ReturnExpression i
+;
+ 
+// (1+2)-3
+LBracket
+| - BinaryExpression '+'
+    | - IntegerExpression '1'
+    | - IntegerExpression '2'
+RBracket
+| - BinaryExpression '-'
+    | - IntegerExpression '3'
+;
+ 
+// func main() { hello('Doge') }
+FuncDeclExpression Name: 'main'
+| - FuncCallExpression 'hello'
+    | - StringExpression 'Hello'
+;
