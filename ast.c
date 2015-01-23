@@ -1,35 +1,8 @@
 #include "ast.h"
-/*
-int main(void) {
-   
-  // Expression *integer = makeBinaryOperation(makeInteger(1), makeBinaryOperation(makeInteger(10), makeInteger(1), PLUS), PLUS);
 
-  //Node *integer = makeInteger(1);
-
-  //x  Node *integer = makeBinaryOperation(makeCharacter('a'), makeInteger(1), PLUS);
-
-  /* Node *integer = makeBinaryOperation(makeInteger(1),  makeBinaryOperation(makeInteger(1), makeInteger(1), MINUS), PLUS); */
-
-  //  Node *integer = makeBinaryOperation(makeInteger(1),  NULL, PLUS);
-/*
-  Node *integer = makeBinaryOperation(makeInteger(1), makeBinaryOperation(makeInteger(2),
-                                                                          makeInteger(3), MINUS), PLUS);
-  
-  printNode(integer);
-
-  deleteNode(integer);
-
-  printf(";\n");
-
-  return 0;
-
-}
-*/
 Node *makeNode(void) {
 
   Node *node = malloc(sizeof(Node));
-
-  log_info("Allocating Node");
 
   node->expression = NULL;
 
@@ -77,8 +50,6 @@ Node *makeInteger(int value) {
 
   node->type = TYPE_INTEGER;
 
-  log_info("Allocating %s", getAstNodeTypeString(node->type));
-
   return node;
 
 }
@@ -94,8 +65,6 @@ Node *makeCharacter(char value) {
   node->expression->character->value = value;
 
   node->type = TYPE_CHAR;
-
-  log_info("Allocating %s", getAstNodeTypeString(node->type));
 
   return node;
 
@@ -115,11 +84,6 @@ Node *makeString(char *value) {
 
   node->type = TYPE_STRING;
 
-  log_info("Allocating %s", getAstNodeTypeString(node->type));
-
-  // I dunno
-  //  free(value);
-
   return node;
 
 }
@@ -135,8 +99,6 @@ Node *makeBoolean(bool value) {
   node->expression->boolean->value = value;
 
   node->type = TYPE_BOOLEAN;
-
-  log_info("Allocating %s", getAstNodeTypeString(node->type));
 
   return node;
 
@@ -157,8 +119,6 @@ Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type) {
   node->expression->binOperation->binOperationType = type;
 
   node->type = TYPE_BINARYOPERATION;
-
-  log_info("Allocating %s", getAstNodeTypeString(node->type));
 
   return node;
 
@@ -225,73 +185,35 @@ void deleteNode(Node *node) {
 
   free(node);
 
-  log_info("Freed Node");
-
 }
 
 void deleteExpression(Expression *expression) {
 
-  /* Note: The log_info's are 'hardcoded' because the way that the AST is designed I cannot find 
-     a reasonible way of getting the type without passing a node as optional parameter which
-     is more trouble than it's worth. */
-
-  if (expression->integer) {
-
+  if (expression->integer)
     free(expression->integer);
 
-    log_info("Freed IntegerExpression");
-
-  }
-
-  if (expression->character) {
-
+  if (expression->character)
     free(expression->character);
-		
-    log_info("Freed CharacterExpression");
 
-  }
+  if (expression->string)
+    free(expression->string); 
 
-  if (expression->string) {
-
-    free(expression->string);
-
-    log_info("Freed StringExpression");
-
-  }
-
-  if (expression->boolean) {
-    
+  if (expression->boolean)    
     free(expression->boolean);
-
-    log_info("Freed BooleanExpression");
-
-  }
 
   if (expression->binOperation) {
 
-    if (expression->binOperation->left) {
-
+    if (expression->binOperation->left)
       deleteNode(expression->binOperation->left);
 
-      log_info("Freed right BinaryOperation");
-			
-    }
-
-    if (expression->binOperation->right) {
-
+    if (expression->binOperation->right)
       deleteNode(expression->binOperation->right);
-
-      log_info("Freed left BinaryOperation");
-
-    }
 
     free(expression->binOperation);
 
   }
 
   free(expression);
-
-  log_info("Freed Expression");
 
 }
 

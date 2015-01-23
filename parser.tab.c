@@ -65,23 +65,21 @@
 #line 1 "parser.y" /* yacc.c:339  */
 
 
+#ifndef PARSER_H
+
+#define PARSER_H
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "ast.h"
+#include "utils.h"
 
-  /* Note - <stdbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
-     like it being included here */
+extern int yylex();
 
-  extern int yylex();
+void yyerror(const char *s);
 
-  void yyerror(const char *s);
 
-  //  #define YYSTYPE struct Expression *
-
-  
-
-#line 85 "parser.tab.c" /* yacc.c:339  */
+#line 83 "parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -144,7 +142,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 23 "parser.y" /* yacc.c:355  */
+#line 22 "parser.y" /* yacc.c:355  */
 
 
   int integer;
@@ -162,7 +160,7 @@ union YYSTYPE
   // struct Expression *expression;
 
 
-#line 166 "parser.tab.c" /* yacc.c:355  */
+#line 164 "parser.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -177,7 +175,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 181 "parser.tab.c" /* yacc.c:358  */
+#line 179 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -476,8 +474,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    62,    62,    63,    64,    74,    75,    78,    79,    81,
-      84,    85,    86,    87,    89,    92,    93,    94,    95
+       0,    57,    57,    58,    59,    69,    70,    73,    74,    76,
+      79,    80,    81,    82,    84,    87,    88,    89,    90
 };
 #endif
 
@@ -1265,91 +1263,91 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 63 "parser.y" /* yacc.c:1646  */
+#line 58 "parser.y" /* yacc.c:1646  */
     { exit(EXIT_SUCCESS); }
-#line 1271 "parser.tab.c" /* yacc.c:1646  */
+#line 1269 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 64 "parser.y" /* yacc.c:1646  */
+#line 59 "parser.y" /* yacc.c:1646  */
     {}
-#line 1277 "parser.tab.c" /* yacc.c:1646  */
+#line 1275 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 74 "parser.y" /* yacc.c:1646  */
+#line 69 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[0].node); printNode((yyval.node)); deleteNode((yyval.node)); }
-#line 1283 "parser.tab.c" /* yacc.c:1646  */
+#line 1281 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 75 "parser.y" /* yacc.c:1646  */
+#line 70 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[0].node); printNode((yyval.node)); deleteNode((yyval.node)); }
-#line 1289 "parser.tab.c" /* yacc.c:1646  */
+#line 1287 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 81 "parser.y" /* yacc.c:1646  */
+#line 76 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[-1].node); }
-#line 1295 "parser.tab.c" /* yacc.c:1646  */
+#line 1293 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 84 "parser.y" /* yacc.c:1646  */
+#line 79 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeInteger((yyvsp[0].integer)); }
-#line 1301 "parser.tab.c" /* yacc.c:1646  */
+#line 1299 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 85 "parser.y" /* yacc.c:1646  */
+#line 80 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeString((yyvsp[0].string)); }
-#line 1307 "parser.tab.c" /* yacc.c:1646  */
+#line 1305 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 86 "parser.y" /* yacc.c:1646  */
+#line 81 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBoolean((yyvsp[0].boolean)); }
-#line 1313 "parser.tab.c" /* yacc.c:1646  */
+#line 1311 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 87 "parser.y" /* yacc.c:1646  */
+#line 82 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBoolean((yyvsp[0].boolean)); }
-#line 1319 "parser.tab.c" /* yacc.c:1646  */
+#line 1317 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 89 "parser.y" /* yacc.c:1646  */
+#line 84 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBoolean(false); }
-#line 1325 "parser.tab.c" /* yacc.c:1646  */
+#line 1323 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 92 "parser.y" /* yacc.c:1646  */
-    { (yyval.node) = makeBinaryOperation((yyvsp[-2].node), (yyvsp[0].node), PLUS); (yyval.node) = NULL; }
-#line 1331 "parser.tab.c" /* yacc.c:1646  */
+#line 87 "parser.y" /* yacc.c:1646  */
+    { (yyval.node) = makeBinaryOperation((yyvsp[-2].node), (yyvsp[0].node), PLUS); }
+#line 1329 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 93 "parser.y" /* yacc.c:1646  */
+#line 88 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBinaryOperation((yyvsp[-2].node), (yyvsp[0].node), MINUS); }
-#line 1337 "parser.tab.c" /* yacc.c:1646  */
+#line 1335 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 94 "parser.y" /* yacc.c:1646  */
+#line 89 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBinaryOperation((yyvsp[-2].node), (yyvsp[0].node), TIMES); }
-#line 1343 "parser.tab.c" /* yacc.c:1646  */
+#line 1341 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 95 "parser.y" /* yacc.c:1646  */
+#line 90 "parser.y" /* yacc.c:1646  */
     { (yyval.node) = makeBinaryOperation((yyvsp[-2].node), (yyvsp[0].node), DIVIDE); }
-#line 1349 "parser.tab.c" /* yacc.c:1646  */
+#line 1347 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1353 "parser.tab.c" /* yacc.c:1646  */
+#line 1351 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1577,11 +1575,15 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 98 "parser.y" /* yacc.c:1906  */
+#line 93 "parser.y" /* yacc.c:1906  */
 
 
 void yyerror(const char *s) {
 
-  fprintf(stderr, "Error: %s\n", s);
+	log_error("%s at line", s);
+
+	YYERROR;
 
 }
+
+#endif /* PARSER_H */

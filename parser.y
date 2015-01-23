@@ -1,20 +1,19 @@
 %{
 
+#ifndef PARSER_H
+
+#define PARSER_H
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "ast.h"
+#include "utils.h"
 
-  /* Note - <stdbool.h> is included in "ast.h" and "lexer.l" for some reason the compiler does not
-     like it being included here */
+extern int yylex();
 
-  extern int yylex();
+void yyerror(const char *s);
 
-  void yyerror(const char *s);
-
-  //  #define YYSTYPE struct Expression *
-
-  %}
+%}
 
 // This allows for good error messages to be called with yyerror();
 
@@ -50,10 +49,6 @@
 %left T_TIMES T_DIVIDE
 
 %type <node> main expressions expression operator literal 
-
-//%type <statement> statement func 
-
-//%type <expression> expression operator literal block
 
 %start main
 
@@ -99,6 +94,8 @@ operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS);
 
 void yyerror(const char *s) {
 
-  fprintf(stderr, "Error: %s\n", s);
+	log_error("%s at line", s);
 
 }
+
+#endif /* PARSER_H */

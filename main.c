@@ -1,7 +1,13 @@
 #include "main.h"
 
 int main(int argc, char *argv[]) {
+/*
+  log_warning("THIS IS A ERROR MESSAGE");
 
+  log_error("THIS IS ANOTHER");
+
+  log_info("This is info");
+*/
   // Check if a filename is given.
   
   if (argc == 2) {
@@ -12,7 +18,7 @@ int main(int argc, char *argv[]) {
     
     if (!openFile) {
 
-      fprintf(stderr, "Cannot open %sl\n", argv[1]);
+      fprintf(stderr, "Cannot open %s\n", argv[1]);
 
       return EXIT_FAILURE;
 

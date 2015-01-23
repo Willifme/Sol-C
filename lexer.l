@@ -1,11 +1,13 @@
 %{
 
+#ifndef LEXER_H
+
+#define LEXER_H
+
 #include <stdio.h>
-// This has to be included so that the parser does not complain
 #include <stdbool.h>
 #include "parser.tab.h"
-
-#define YY_DECL extern int yylex()
+#include "utils.h"
 
 #define TOKEN(t) (yylval.integer = t)
 
@@ -14,6 +16,10 @@
 %option noyywrap
 
 %option yylineno
+
+%option nounput
+
+%option noinput
 
 %x COMMENT
 
@@ -35,7 +41,7 @@ ANYTHING [^(\"|')]
 
 "if" { return TOKEN(T_IF); }
 
-"true" { yylval.boolean = yytext ? true : false; return T_TRUE; }
+"true" { yylval.boolean = atoi(yytext); return T_TRUE; }
 
 "false" { yylval.boolean = atoi(yytext); return T_FALSE; }
 
@@ -76,6 +82,8 @@ ANYTHING [^(\"|')]
 
 [ \t\n]+ {  }
 
-. { printf("Unrecognised character \"%s\" at line %d\n", yytext, yylineno); yyterminate(); }
+. { log_warning("Unrecognised character \"%s\" at line %d", yytext, yylineno);  yyterminate(); }
 
 %%
+
+#endif /* LEXER_L */

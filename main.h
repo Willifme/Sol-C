@@ -1,8 +1,13 @@
+#ifndef MAIN_H
+
+#define MAIN_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include "parser.tab.h"
+#include "utils.h"
 
 #ifdef __APPLE__
 
@@ -26,3 +31,5 @@ extern int yy_scan_string(const char *s);
 extern FILE *yyin;
 
 void repl(void);
+
+#endif /* MAIN_H */

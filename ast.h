@@ -1,17 +1,11 @@
+#ifndef AST_H
+
+#define AST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-#ifdef DEBUG
-
-#define log_info(M, ...) fprintf(stderr, "[INFO] (%s:%d) " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
-
-#else
-
-// How else can I handle a undefined macro? apart from part redefining it?
-#define log_info(M, ...)
-
-#endif
+#include "utils.h"
 
 typedef enum AstNodeType {
 
@@ -113,3 +107,5 @@ void deleteExpression(Expression *expression);
 const char *getBinaryOperationChar(BinaryOperationType type);
 
 const char *getAstNodeTypeString(AstNodeType type);
+
+#endif /* AST_H */
