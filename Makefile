@@ -1,5 +1,5 @@
 SRC=main.c ast.c lex.yy.c parser.tab.c
-CFLAGS=-o lexer -Wall -ggdb
+CFLAGS=-o lexer -Wall
 LIBS= -ledit
 
 all: sol

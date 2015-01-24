@@ -82,7 +82,7 @@ ANYTHING [^(\"|')]
 
 [ \t\n]+ {  }
 
-. { log_warning("Unrecognised character \"%s\" at line %d", yytext, yylineno);  yyterminate(); }
+. { log_error("Unrecognised character \"%s\" at line %d", yytext, yylineno);  yyterminate(); }
 
 %%
 

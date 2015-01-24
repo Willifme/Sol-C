@@ -14,6 +14,9 @@ typedef enum AstNodeType {
   TYPE_STRING,
   TYPE_BOOLEAN,
   TYPE_BINARYOPERATION,
+  TYPE_FUNCDECLARATION,
+  TYPE_BLOCK,
+  TYPE_UNKNOWN
 
 } AstNodeType;
 
@@ -28,25 +31,27 @@ typedef enum BinaryOperationType {
 
 typedef struct Node {
 
-  struct Expression *expression;
+  union {
 
+    struct Integer *integer;
+
+ 	struct Character *character;
+
+ 	struct String *string;
+
+ 	struct Boolean *boolean;
+
+ 	struct BinaryOperation *binOperation;
+
+	struct FuncDeclaration *funcDecl;
+
+	struct Block *block;
+
+  };
+ 
   AstNodeType type;
 
 } Node;
-
-typedef struct Expression {
-
-  struct Integer *integer;
-
-  struct Character *character;
-
-  struct String *string;
-
-  struct Boolean *boolean;
-
-  struct BinaryOperation *binOperation;
-
-} Expression;
 
 typedef struct Integer {
 
@@ -80,11 +85,26 @@ typedef struct BinaryOperation {
 
 } BinaryOperation;
 
+
+typedef struct FuncDeclaration {
+
+	struct Node *block;
+
+	struct Node *arguments;
+
+	const char *name;
+
+	unsigned int arg_count;
+
+} FuncDeclaration;
+
+typedef struct Block {
+
+	struct Node *expressions;
+
+} Block;
+
 Node *makeNode(void);
-
-Node *makeExpressionNode(Expression *expression);
-
-Expression *makeExpression(void);
 
 Node *makeInteger(int value);
 
@@ -96,16 +116,18 @@ Node *makeBoolean(bool value);
 
 Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type);
 
+Node *makeFuncDeclaration(const char *name, struct Node *arguments, struct Node *block);
+
+Node *makeBlock(struct Node *expressions);
+
 void printNode(Node *node);
 
-void printExpression(Expression *expression);
-
 void deleteNode(Node *node);
-
-void deleteExpression(Expression *expression);
 
 const char *getBinaryOperationChar(BinaryOperationType type);
 
 const char *getAstNodeTypeString(AstNodeType type);
+
+void printNodeValue(Node *node);
 
 #endif /* AST_H */

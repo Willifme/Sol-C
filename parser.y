@@ -48,7 +48,7 @@ void yyerror(const char *s);
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
 
-%type <node> main expressions expression operator literal 
+%type <node> main expressions expression operator literal func block 
 
 %start main
 
@@ -58,23 +58,25 @@ main: expressions
     | T_QUIT { exit(EXIT_SUCCESS); } // No where better for know. Quit will become a function
     | T_COMMENT  {} // Comments need to be properly fixed however.
     ;
-/*
-func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncStatement($5); }
-    ;
 
-block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = $2; }
-     | T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = $3; }
-     ;
-*/
 expressions: expression { $$ = $1; printNode($$); deleteNode($$); }
            | expressions expression { $$ = $2; printNode($$); deleteNode($$); }
            ;
 
 expression: literal
           | operator 
+		  | func
           // Get this to have expressions between the brackets
           | T_LBRACKET expression T_RBRACKET { $$ = $2; }
           ;
+
+func: T_FUNC T_IDENTIFIER T_LBRACKET T_RBRACKET block { $$ = makeFuncDeclaration($2, makeBinaryOperation(makeInteger(2), makeInteger(3), PLUS), $5); }
+    ;
+
+block: T_LSQUIGBRACKET expression T_RSQUIGBRACKET { $$ = makeBlock($2); }
+     | T_LSQUIGBRACKET expressions expression T_RSQUIGBRACKET { $$ = makeBlock($3); }
+     ;
+
 
 literal: T_INT { $$ = makeInteger($1); }
        | T_STRING { $$ = makeString($1); }

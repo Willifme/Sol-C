@@ -4,37 +4,9 @@ Node *makeNode(void) {
 
   Node *node = malloc(sizeof(Node));
 
-  node->expression = NULL;
+	node->type = TYPE_UNKNOWN;
 
   return node;
-
-}
-
-Node *makeExpressionNode(Expression *expression) {
-
-  Node *node = makeNode();
-
-  node->expression = expression;
-
-  return node;
-
-}
-
-Expression *makeExpression(void) {
-
-  Expression *expression = malloc(sizeof(Expression));
-
-  expression->integer = NULL;
-
-  expression->character = NULL;
-
-  expression->string = NULL;
-
-  expression->boolean = NULL;
-
-  expression->binOperation = NULL;
-
-  return expression;
 
 }
 
@@ -42,11 +14,9 @@ Node *makeInteger(int value) {
 
   Node *node = makeNode();
 
-  node->expression = makeExpression();
+  node->integer = malloc(sizeof(Integer));
 
-  node->expression->integer = malloc(sizeof(Integer));
-
-  node->expression->integer->value = value;
+  node->integer->value = value;
 
   node->type = TYPE_INTEGER;
 
@@ -58,11 +28,9 @@ Node *makeCharacter(char value) {
 
   Node *node = makeNode();
 
-  node->expression = makeExpression();
+  node->character = malloc(sizeof(Character));
 
-  node->expression->character = malloc(sizeof(Character));
-
-  node->expression->character->value = value;
+  node->character->value = value;
 
   node->type = TYPE_CHAR;
 
@@ -74,13 +42,11 @@ Node *makeString(char *value) {
 
   Node *node = makeNode();
 
-  node->expression = makeExpression();
-
-  node->expression->string = malloc(sizeof(String));
+  node->string = malloc(sizeof(String));
 
   // GAHH pointers !*& - I am guessing with this
 
-  node->expression->string->value = value;
+  node->string->value = value;
 
   node->type = TYPE_STRING;
 
@@ -92,11 +58,9 @@ Node *makeBoolean(bool value) {
 
   Node *node = makeNode();
 
-  node->expression = makeExpression();
+  node->boolean = malloc(sizeof(Boolean));
 
-  node->expression->boolean = malloc(sizeof(Boolean));
-
-  node->expression->boolean->value = value;
+  node->boolean->value = value;
 
   node->type = TYPE_BOOLEAN;
 
@@ -108,19 +72,52 @@ Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type) {
 
   Node *node = makeNode();
 
-  node->expression = makeExpression();
+  node->binOperation = malloc(sizeof(BinaryOperation));
 
-  node->expression->binOperation = malloc(sizeof(BinaryOperation));
+  node->binOperation->left = left;
 
-  node->expression->binOperation->left = left;
+  node->binOperation->right = right;
 
-  node->expression->binOperation->right = right;
-
-  node->expression->binOperation->binOperationType = type;
+  node->binOperation->binOperationType = type;
 
   node->type = TYPE_BINARYOPERATION;
 
   return node;
+
+}
+
+Node *makeFuncDeclaration(const char *name, struct Node *arguments, struct Node *block) {
+
+	Node *node = makeNode();
+
+	node->funcDecl = malloc(sizeof(FuncDeclaration));
+
+	node->funcDecl->name = name;
+
+	node->funcDecl->arguments = arguments;
+
+	node->funcDecl->block = block;	
+
+	node->type = TYPE_FUNCDECLARATION;
+
+	for (int i = 0; i < sizeof(arguments); i++)
+		node->funcDecl->arg_count += 1;
+
+	return node;
+
+}
+
+Node *makeBlock(struct Node *expressions) {
+
+	Node *node = makeNode();
+
+	node->block = malloc(sizeof(Block));
+
+	node->block->expressions = expressions;
+
+	node->type = TYPE_BLOCK;
+
+	return node;
 
 }
 
@@ -138,82 +135,157 @@ void printNode(Node *node) {
 
   }
 
-  if (node->expression != NULL) {
+	printf("%s ", getAstNodeTypeString(node->type));
 
-    printf("%s ", getAstNodeTypeString(node->type));
+	// Are the breaks neccessary?
 
-    printExpression(node->expression);
+	switch (node->type) {
+	
+		case TYPE_INTEGER:
 
-  }
-}
+			printf("'%d'\n", node->integer->value);
 
-void printExpression(Expression *expression) {
+			break;
 
-  if (expression->binOperation != NULL) {
+		case TYPE_CHAR:
 
-    printf("'%s'\n", getBinaryOperationChar(expression->binOperation->binOperationType));
+			printf("'%c'\n", node->character->value);
+
+			break;
+
+		case TYPE_STRING:
+
+			printf("%s\n", node->string->value);
+
+			break;
+
+		case TYPE_BOOLEAN:
+
+			// Boolean's cannot be printed in C directly
+    		printf("'%s'\n", node->boolean->value ? "true" : "false");
+
+			break;
+
+		case TYPE_BINARYOPERATION:
+			
+			printf("'%s'\n", getBinaryOperationChar(node->binOperation->binOperationType));
     
-    indent += 1;
+    	indent += 1;
 
-    if (expression->binOperation->left != NULL)
-      printNode(expression->binOperation->left);
+			if (node->binOperation->left) printNode(node->binOperation->left);
 
-    if (expression->binOperation->right != NULL)
-      printNode(expression->binOperation->right);
-     
-  }
- 
-  if (expression->integer != NULL) 
-    printf("'%d'\n", expression->integer->value);
+			if (node->binOperation->right) printNode(node->binOperation->right);
 
-  if (expression->character != NULL)
-    printf("'%c'\n", expression->character->value);
+			indent -= 1;
 
-  if (expression->string != NULL)
-    printf("'%s'\n", expression->string->value);
-  
-  if (expression->boolean != NULL)
-    // Boolean's cannot be printed in C directly
-    printf("'%s'\n", expression->boolean->value ? "true" : "false");
+			break;
+
+		case TYPE_FUNCDECLARATION:
+
+			printf("Name: '%s' Args: [", node->funcDecl->name);
+
+			// This crap will be changed in the future
+			printNodeValue(node->funcDecl->arguments);
+
+			printf("%s", getAstNodeTypeString(node->funcDecl->arguments->type));
+
+			// End the arguments brackets
+			printf("]\n");
+
+			indent += 1;
+
+			if (node->funcDecl->block) printNode(node->funcDecl->block);
+
+			indent -= 1;
+
+			break;
+
+		case TYPE_BLOCK:
+
+	/*		for (int i = 0; i < sizeof(node->block->expressions); i++)*/
+				printNode(node->block->expressions);
+
+			break;
+
+		case TYPE_UNKNOWN:
+
+		default:
+
+			log_error("Cannot print nothing or unknown\n");
+
+			break;
+
+	}
 
 }
 
 void deleteNode(Node *node) {
 
-  if (node->expression)
-    deleteExpression(node->expression);
+	// Are the breaks neccessary?
+
+	switch (node->type) {
+	
+		case TYPE_INTEGER:
+
+			free(node->integer);
+
+			break;
+
+		case TYPE_CHAR:
+
+			free(node->character);
+
+			break;
+
+		case TYPE_STRING:
+
+			free(node->string);
+
+			break;
+
+		case TYPE_BOOLEAN:
+
+			free(node->boolean);
+
+			break;
+
+		case TYPE_BINARYOPERATION:
+
+			if (node->binOperation->left) deleteNode(node->binOperation->left);
+
+			if (node->binOperation->right) deleteNode(node->binOperation->right);
+
+			free(node->binOperation);
+
+			break;
+
+		case TYPE_FUNCDECLARATION:
+
+			if (node->funcDecl->block != NULL) free(node->funcDecl->block);
+
+		//	for (int i = 0; i < sizeof(node->funcDecl->arguments); i++) 
+			deleteNode(node->funcDecl->arguments);
+
+			break;
+
+		case TYPE_BLOCK:
+
+		//	for (int i = 0; i < sizeof(node->block->expressions); i++)
+			deleteNode(node->block->expressions);
+
+			break;
+
+		case TYPE_UNKNOWN:
+
+		default:
+
+			log_error("Cannot free nothing or unkown\n");
+
+			break;
+
+	}
 
   free(node);
-
-}
-
-void deleteExpression(Expression *expression) {
-
-  if (expression->integer)
-    free(expression->integer);
-
-  if (expression->character)
-    free(expression->character);
-
-  if (expression->string)
-    free(expression->string); 
-
-  if (expression->boolean)    
-    free(expression->boolean);
-
-  if (expression->binOperation) {
-
-    if (expression->binOperation->left)
-      deleteNode(expression->binOperation->left);
-
-    if (expression->binOperation->right)
-      deleteNode(expression->binOperation->right);
-
-    free(expression->binOperation);
-
-  }
-
-  free(expression);
 
 }
 
@@ -295,6 +367,22 @@ const char *getAstNodeTypeString(AstNodeType type) {
 
       break;
 
+		case TYPE_FUNCDECLARATION:
+
+			return "FuncDeclaration";
+
+			break;
+
+		case TYPE_BLOCK:
+
+			return "BlockExpression";
+
+			break;
+
+		case TYPE_UNKNOWN:
+
+			return "UnknownNode";
+
     default:
 
       return "Not found";
@@ -305,4 +393,59 @@ const char *getAstNodeTypeString(AstNodeType type) {
 
   return "Not found";
 
+}
+
+void printNodeValue(Node *node) {
+
+	switch (node->type) {
+	
+		case TYPE_INTEGER:
+
+			printf("'%d'", node->integer->value);
+
+			break;
+
+		case TYPE_CHAR:
+
+			printf("'%c'", node->character->value);
+
+			break;
+
+		case TYPE_STRING:
+
+ 		  printf("%s", node->string->value);
+
+			break;
+
+		case TYPE_BOOLEAN:
+
+			// Boolean's cannot be printed in C directly
+	    sprintf("'%s", node->boolean->value ? "true" : "false");
+
+			break;
+
+		case TYPE_BINARYOPERATION:
+			
+			if (node->binOperation->left) printNodeValue(node->binOperation->left);
+
+			if (node->binOperation->right) printNodeValue(node->binOperation->right);
+
+			printf("'%s'", getBinaryOperationChar(node->binOperation->binOperationType));
+
+			break;
+
+		// Purposefully allow them to fall through
+
+		case TYPE_FUNCDECLARATION:
+
+		case TYPE_BLOCK:
+
+		case TYPE_UNKNOWN:
+
+		default:
+
+			log_error("Some types do not have direct values\n");
+
+	}
+	
 }
