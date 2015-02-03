@@ -20,6 +20,15 @@ typedef enum AstNodeType {
 
 } AstNodeType;
 
+typedef enum Types {
+
+  STRING,
+  INT,
+  CHAR,
+  BOOLEAN
+
+} Types;
+
 typedef enum BinaryOperationType {
 
   PLUS,
@@ -90,7 +99,7 @@ typedef struct FuncDeclaration {
 
 	struct Node *block;
 
-	struct Node *arguments;
+	struct Argument *arguments;
 
 	const char *name;
 
@@ -104,6 +113,14 @@ typedef struct Block {
 
 } Block;
 
+typedef struct Argument {
+
+	Types type;
+
+	char *name;
+
+} Argument;
+
 Node *makeNode(void);
 
 Node *makeInteger(int value);
@@ -116,9 +133,13 @@ Node *makeBoolean(bool value);
 
 Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type);
 
-Node *makeFuncDeclaration(const char *name, struct Node *arguments, struct Node *block);
+Node *makeFuncDeclarationWithArgs(const char *name, struct Argument *args, struct Node *block);
+
+Node *makeFuncDeclaration(const char *name, struct Node *block);
 
 Node *makeBlock(struct Node *expressions);
+
+Argument *makeArgument(char *name, Types type);
 
 void printNode(Node *node);
 

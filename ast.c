@@ -86,7 +86,7 @@ Node *makeBinaryOperation(Node *left, Node *right, BinaryOperationType type) {
 
 }
 
-Node *makeFuncDeclaration(const char *name, struct Node *arguments, struct Node *block) {
+Node *makeFuncDeclarationWithArgs(const char *name, struct Argument *argument, struct Node *block) {
 
 	Node *node = makeNode();
 
@@ -94,14 +94,32 @@ Node *makeFuncDeclaration(const char *name, struct Node *arguments, struct Node 
 
 	node->funcDecl->name = name;
 
-	node->funcDecl->arguments = arguments;
+	node->funcDecl->arguments = argument;
 
 	node->funcDecl->block = block;	
 
 	node->type = TYPE_FUNCDECLARATION;
 
-	for (int i = 0; i < sizeof(arguments); i++)
+/*	for (int i = 0; i < sizeof(arguments); i++)
 		node->funcDecl->arg_count += 1;
+*/
+	return node;
+
+}
+
+Node *makeFuncDeclaration(const char *name, struct Node *block) {
+
+	Node *node = makeNode();
+
+	node->funcDecl = malloc(sizeof(FuncDeclaration));
+
+	node->funcDecl->name = name;
+
+	node->funcDecl->arguments = NULL;
+
+	node->funcDecl->block = block;	
+
+	node->type = TYPE_FUNCDECLARATION;
 
 	return node;
 
@@ -118,6 +136,18 @@ Node *makeBlock(struct Node *expressions) {
 	node->type = TYPE_BLOCK;
 
 	return node;
+
+}
+
+Argument *makeArgument(char *name, Types type) {
+
+	Argument *argument = malloc(sizeof(Argument));
+
+	argument->type = type;
+
+	argument->name = name;
+
+	return argument;
 
 }
 
@@ -182,15 +212,13 @@ void printNode(Node *node) {
 
 		case TYPE_FUNCDECLARATION:
 
-			printf("Name: '%s' Args: [", node->funcDecl->name);
+			printf("Name: '%s'", node->funcDecl->name);
 
-			// This crap will be changed in the future
-			printNodeValue(node->funcDecl->arguments);
+			if (node->funcDecl->arguments != NULL)
+				printf("Args: [%s: %s]\n", node->funcDecl->arguments->name,
+					 		getAstNodeTypeString(node->funcDecl->arguments->type));
 
-			printf("%s", getAstNodeTypeString(node->funcDecl->arguments->type));
-
-			// End the arguments brackets
-			printf("]\n");
+			printf("\n");
 
 			indent += 1;
 
@@ -264,7 +292,7 @@ void deleteNode(Node *node) {
 			if (node->funcDecl->block != NULL) free(node->funcDecl->block);
 
 		//	for (int i = 0; i < sizeof(node->funcDecl->arguments); i++) 
-			deleteNode(node->funcDecl->arguments);
+			free(node->funcDecl->arguments);
 
 			break;
 

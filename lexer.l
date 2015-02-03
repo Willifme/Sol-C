@@ -49,6 +49,8 @@ ANYTHING [^(\"|')]
 
 "return" { return TOKEN(T_RETURN); }
 
+"String" { return TOKEN(T_TYPESTRING); }
+
  /* Always put this rule after any keywords or anything that matches this regex */
 [a-zA-Z\x80-\xf3]+ { yylval.string = strndup(yytext, yyleng); return T_IDENTIFIER; }
 
@@ -71,6 +73,8 @@ ANYTHING [^(\"|')]
 "{" { return TOKEN(T_LSQUIGBRACKET); }
 
 "}" { return TOKEN(T_RSQUIGBRACKET); }
+
+":" { return TOKEN(T_COLON); }
 
 "//"{ANYTHING}+ { return TOKEN(T_COMMENT); }
 

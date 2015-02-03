@@ -58,7 +58,9 @@
      T_RETURN = 274,
      T_COMMA = 275,
      T_COMMENT = 276,
-     T_NULL = 277
+     T_NULL = 277,
+     T_COLON = 278,
+     T_TYPESTRING = 279
    };
 #endif
 /* Tokens.  */
@@ -82,6 +84,8 @@
 #define T_COMMA 275
 #define T_COMMENT 276
 #define T_NULL 277
+#define T_COLON 278
+#define T_TYPESTRING 279
 
 
 
@@ -101,13 +105,21 @@ typedef union YYSTYPE
 
   struct Node *node;
 
+//  struct Types *type;
+
+  struct Argument *argument;
+
+  Types type;
+
+  //enum AstNodeType type;
+	
   // struct Statement *statement;
 
   // struct Expression *expression;
 
 }
 /* Line 1529 of yacc.c.  */
-#line 111 "parser.tab.h"
+#line 123 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
