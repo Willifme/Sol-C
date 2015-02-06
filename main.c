@@ -1,60 +1,46 @@
 #include "main.h"
 
 int main(int argc, char *argv[]) {
-/*
-  log_warning("THIS IS A ERROR MESSAGE");
 
-  log_error("THIS IS ANOTHER");
+  parserState state = { NULL, 0 };
 
-  log_info("This is info");
-*/
   // Check if a filename is given.
   
-  if (argc == 2) {
-  
-    FILE *openFile = fopen(argv[1], "r");
+  if (argc > 1) {
 
-    // Checks if the file can be open if not exit with a error
-    
-    if (!openFile) {
+	yyin = fopen(argv[1], "r");
 
-      fprintf(stderr, "Cannot open %s\n", argv[1]);
+	state.sourceFile = strdup(argv[1]);
 
-      return EXIT_FAILURE;
-
-    }
-
-    // Set lex to read from it 
-    yyin = openFile;
-
-    // Parse through input until the end of the file has been reached
-    do {
-
-      yyparse();
-    
-    } while (!feof(yyin));
-
-    // I think this is neccessary 
-
-    fclose(openFile);
+	yyparse(&state);
 
   } else {
 
-    repl();
-    
+	repl();
+
   }
-  
+
+  fclose(yyin);
+
+  free(&state.sourceFile);
+
+  free(&state);
+
   return 0;
   
 }
 
 void repl(void) {
 
+  parserState state = { NULL, 0 };
+
   printf("Welcome to Sol %s type \"quit\" to exit\n", VERSION);
   
   while (1) {
 
     char *input= readline(">> ");
+
+    state.sourceFile = "repl";
 
     /* Check if the length of the input is >= 1 e.g. There is some input then continue
     else go back to the start of the loop and ask for input again */
@@ -65,7 +51,7 @@ void repl(void) {
 
       yy_scan_string(input);
 
-      yyparse();
+      yyparse(&state);
 
     } else {
 
@@ -74,6 +60,8 @@ void repl(void) {
     }
     
     free(input);
+
+//	free(&state);
 
   }
   

@@ -6,10 +6,15 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include "ast.h"
 #include "parser.tab.h"
 #include "utils.h"
 
-#define TOKEN(t) (yylval.integer = t)
+#define YY_DECL int yylex(YYSTYPE *yylval, parserState *state)
+
+#define TOKEN(id) return id
+
+#define KEYWORD(id) return id
 
 %}
 
@@ -23,71 +28,76 @@
 
 %x COMMENT
 
-NUMBER [0-9]
-
-DOUBLEQOUTE \"
-
-SINGLEQOUTE \'
-
-ANYTHING [^(\"|')]
+NUMBER [+-]?[0-9](_[0-9][0-9])*
 
 %%
 
-{NUMBER}+ { yylval.integer = atoi(yytext); return T_INT; }
+quit { KEYWORD(T_QUIT); }
 
-"quit" { return TOKEN(T_QUIT); }
+func { KEYWORD(T_FUNC); }
 
-"func" { return TOKEN(T_FUNC); }
+if { KEYWORD(T_IF); }
 
-"if" { return TOKEN(T_IF); }
+true { yylval->boolean = atoi(yytext); KEYWORD(T_TRUE); }
 
-"true" { yylval.boolean = atoi(yytext); return T_TRUE; }
+false { yylval->boolean = atoi(yytext); KEYWORD(T_FALSE); }
 
-"false" { yylval.boolean = atoi(yytext); return T_FALSE; }
+null { KEYWORD(T_NULL); }
 
-"null" { return TOKEN(T_NULL); }
+return { KEYWORD(T_RETURN); }
 
-"return" { return TOKEN(T_RETURN); }
+String { KEYWORD(T_TYPESTRING); }
 
-"String" { return TOKEN(T_TYPESTRING); }
+Int { KEYWORD(T_TYPEINT); }
+
+Char { KEYWORD(T_TYPECHAR); }
+
+Bool { KEYWORD(T_TYPEBOOL); }
+
+{NUMBER}+ { yylval->integer = atoi(yytext); TOKEN(T_INT); }
 
  /* Always put this rule after any keywords or anything that matches this regex */
-[a-zA-Z\x80-\xf3]+ { yylval.string = strndup(yytext, yyleng); return T_IDENTIFIER; }
+[a-zA-Z0-9\x80-\xf3_]+ { yylval->string = strndup(yytext, yyleng); return T_IDENTIFIER; }
 
-{DOUBLEQOUTE}{ANYTHING}*{DOUBLEQOUTE} { yylval.string = yytext; return T_STRING; }
+ /* This should parse single and double qouted strings */
+\"([^"]|\\.)*\" { yylval->string = yytext; return T_STRING; }
 
-{SINGLEQOUTE}{ANYTHING}*{SINGLEQOUTE} { yylval.string = yytext; return T_STRING; }
+\'([^']|\\.)*\' { yylval->string = yytext; return T_STRING; }
 
-"+" { return TOKEN(T_PLUS); }
+"+" { TOKEN(T_PLUS); }
 
-"-" { return TOKEN(T_MINUS); } // 10 seconds
+"-" { TOKEN(T_MINUS); } // 10 seconds
 
-"*" { return TOKEN(T_TIMES); }
+"*" { TOKEN(T_TIMES); }
 
-"/" { return TOKEN(T_DIVIDE); }
+"/" { TOKEN(T_DIVIDE); }
 
-"(" { return TOKEN(T_LBRACKET); }
+"(" { TOKEN(T_LBRACKET); }
 
-")" { return TOKEN(T_RBRACKET); }
+")" { TOKEN(T_RBRACKET); }
 
-"{" { return TOKEN(T_LSQUIGBRACKET); }
+"{" { TOKEN(T_LSQUIGBRACKET); }
 
-"}" { return TOKEN(T_RSQUIGBRACKET); }
+"}" { TOKEN(T_RSQUIGBRACKET); }
 
-":" { return TOKEN(T_COLON); }
+":" { TOKEN(T_COLON); }
 
-"//"{ANYTHING}+ { return TOKEN(T_COMMENT); }
+[\t ] {}
 
-"/*" { BEGIN(COMMENT); }
-
-<COMMENT>"*/" { BEGIN(INITIAL); }
-
-<COMMENT>{ANYTHING} { return TOKEN(T_COMMENT); }
-
-[ \t\n]+ {  }
+\n {}
 
 . { log_error("Unrecognised character \"%s\" at line %d", yytext, yylineno);  yyterminate(); }
 
 %%
 
+/*
+"//"{ANYTHING}+ { TOKEN(T_COMMENT); }
+
+"" { BEGIN(COMMENT); }
+
+<COMMENT>"" { BEGIN(INITIAL); }
+
+<COMMENT>{ANYTHING} { TOKEN(T_COMMENT); }
+
+*/
 #endif /* LEXER_L */

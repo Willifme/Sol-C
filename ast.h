@@ -2,6 +2,8 @@
 
 #define AST_H
 
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -25,7 +27,7 @@ typedef enum Types {
   STRING,
   INT,
   CHAR,
-  BOOLEAN
+  BOOL
 
 } Types;
 
@@ -37,6 +39,14 @@ typedef enum BinaryOperationType {
   DIVIDE,
 
 } BinaryOperationType;
+
+typedef struct parserState {
+
+  char *sourceFile;
+
+  int sourceLine;
+
+} parserState;
 
 typedef struct Node {
 

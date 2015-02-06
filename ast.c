@@ -214,9 +214,9 @@ void printNode(Node *node) {
 
 			printf("Name: '%s'", node->funcDecl->name);
 
-			if (node->funcDecl->arguments != NULL)
+	/*		if (node->funcDecl->arguments != NULL)
 				printf("Args: [%s: %s]\n", node->funcDecl->arguments->name,
-					 		getAstNodeTypeString(node->funcDecl->arguments->type));
+					 		getAstNodeTypeString(node->funcDecl->arguments->type));*/
 
 			printf("\n");
 
@@ -289,7 +289,7 @@ void deleteNode(Node *node) {
 
 		case TYPE_FUNCDECLARATION:
 
-			if (node->funcDecl->block != NULL) free(node->funcDecl->block);
+			if (node->funcDecl->block) deleteNode(node->funcDecl->block);
 
 		//	for (int i = 0; i < sizeof(node->funcDecl->arguments); i++) 
 			free(node->funcDecl->arguments);

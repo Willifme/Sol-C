@@ -1,23 +1,22 @@
 %{
 
-#ifndef PARSER_H
-
-#define PARSER_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "ast.h"
-#include "utils.h"
 
-extern int yylex();
-
-void yyerror(const char *s);
+extern void yyerror(struct parserState *state, const char *s);
 
 %}
 
 // This allows for good error messages to be called with yyerror();
 
 %error-verbose
+
+%pure-parser
+
+%parse-param { parserState *state }
+
+%lex-param { state }
 
 %union {
 
@@ -31,19 +30,17 @@ void yyerror(const char *s);
 
   struct Node *node;
 
-//  struct Types *type;
-
   struct Argument *argument;
 
   Types type;
 
-  //enum AstNodeType type;
-	
-  // struct Statement *statement;
-
-  // struct Expression *expression;
-
 }
+
+%{ 
+
+extern int yylex(YYSTYPE *yylval, parserState *state);
+
+%}
 
 %token <integer> T_INT
 %token <string> T_IDENTIFIER T_STRING
@@ -52,6 +49,7 @@ void yyerror(const char *s);
 %token <token> T_PLUS T_MINUS T_TIMES T_DIVIDE T_LBRACKET T_RBRACKET
 %token <token> T_QUIT T_FUNC T_IF T_LSQUIGBRACKET T_RSQUIGBRACKET
 %token <token> T_RETURN T_COMMA T_COMMENT T_NULL T_COLON T_TYPESTRING
+%token <token> T_TYPEBOOL T_TYPECHAR T_TYPEINT
 
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIVIDE
@@ -102,15 +100,17 @@ operator: expression T_PLUS expression { $$ = makeBinaryOperation($1, $3, PLUS);
         | expression T_DIVIDE expression { $$ = makeBinaryOperation($1, $3, DIVIDE); }
         ;
 
-types: T_TYPESTRING { $$ = TYPE_STRING; }
+types: T_TYPESTRING { $$ = STRING; }
+	 | T_TYPEINT { $$ = INT; }
+	 | T_TYPECHAR { $$ = CHAR; }
+     | T_TYPEBOOL { $$ = BOOL; }
 	 ;
 
 %%
 
-void yyerror(const char *s) {
+void yyerror(struct parserState *state, const char *s) {
 
-	log_error("%s at line", s);
+	log_error("%s at line at %d in %s", s, state->sourceLine, state->sourceFile);
 
 }
 
-#endif /* PARSER_H */

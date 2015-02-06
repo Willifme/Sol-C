@@ -3,11 +3,10 @@
 #define MAIN_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include "parser.tab.h"
 #include "utils.h"
+#include "ast.h"
+#include "parser.tab.h"
 
 #ifdef __APPLE__
 
@@ -24,7 +23,7 @@
 
 #define VERSION "0.0.1"
 
-extern int yyparse();
+extern int yyparse(parserState *state);
 
 extern int yy_scan_string(const char *s);
   
